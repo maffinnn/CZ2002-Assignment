@@ -1,0 +1,272 @@
+package restaurant;
+import java.io.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.TreeSet;
+
+/**
+ * Manages table and reservation in the restaurant.
+ *
+ * @author owl
+ * @author TODO
+ * @version 0.0
+ */
+public class TableManager {
+    /**
+     * List of capacities of all tables in the restaurant. Table ID is the index of
+     * that table in this array.
+     */
+    private ArrayList<Integer> tables;
+
+    /**
+     * The list of all active reservations.
+     */
+    private TreeSet<Reservation> reservations;
+
+    public TableManager(){
+        tables = new ArrayList<>();
+        reservations = new TreeSet<>();
+        loadReservations();
+        loadTables();
+    }
+
+    /**
+     * Returns the capacity of the table by id.
+     *
+     * @param id The id of the table.
+     * @return The capacity of the table.
+     * @throws IllegalArgumentException If id is out of range.
+     */
+    public int getTableCapacity(int id) {
+        // TODO
+        if(id < 0||id>tables.size()){
+            throw new IllegalArgumentException();
+        } else return tables.get(id);
+    }
+
+    /**
+     * Returns the number of tables in the restaurant.
+     *
+     * @return The number of tables in the restaurant.
+     */
+    public int getTableCount() {
+        // TODO
+        return tables.size();
+    }
+
+    /**
+     * Adds a table with given capacity.
+     *
+     * @param capacity The capacity of the table to be added.
+     */
+    public void addTable(int capacity) {
+        // TODO
+        tables.add(capacity);
+    }
+
+    /**
+     * Adds a reservation.
+     *
+     * @param reservation The reservation made.
+     * @throws IllegalArgumentException If talbe indicated in the reservation is not
+     *                                  available at the specified time slot.
+     */
+    public void addReservation(Reservation reservation) {
+        reservations.add(reservation);
+    }
+
+    /**
+     * Returns reservation(s).
+     *
+     * @param contact The id of the reservation.
+     * @return A list of reservations for the given contact
+     */
+    public ArrayList<Reservation> getReservation(long contact) {
+        ArrayList<Reservation> resultList = new ArrayList<>();
+        
+        for(Reservation r: reservations){
+            if(r.contact == contact){
+                resultList.add(r);
+            }
+        }
+        return resultList;
+    }
+
+    public ArrayList<Reservation> getReservations(int tableId){
+        ArrayList<Reservation> resultList = new ArrayList<>();
+        for (Reservation r: reservations){
+            if (r.tableId == tableId){
+                resultList.add(r);
+                break;
+            }
+        }
+        return resultList;
+    }
+
+    /**
+     * Returns the number of active reservations.
+     *
+     * @return The number of active reservations.
+     */
+    public int getReservationCount() {
+        update();
+        return reservations.size();
+    }
+
+    /**
+     * Removes the given reservation, if exists.
+     */
+    public void removeReservation(Reservation reservation) {
+        // TODO
+        reservations.remove(reservation);
+    }
+
+    /**
+     * Returns a list of id of available tables at given time with capacity equal or
+     * larger than pax. This method automatically calls {@code update()} to clear
+     * expired reservations.
+     *
+     * @param time Query time.
+     * @param pax  Number of person at table.
+     * @return An array of id of available tables, sort in order from the small (but
+     *         still larger than pax) to large.
+     */
+    public ArrayList<Integer> getAvailableTables(LocalDateTime time, int pax) {
+        // TODO
+        ArrayList<Integer> tableIndex = new ArrayList<>();
+        boolean occupied[] = getAvailableTables(time);
+        for(int i = 0; i < tables.size(); i++){
+            if(!occupied[i] && tables.get(i) >= pax) {
+                tableIndex.add(i);
+            }
+        }
+        return tableIndex;
+    }
+
+    public boolean[] getAvailableTables(LocalDateTime time){
+        update();
+        boolean[] occupied = new boolean[tables.size()];
+        Arrays.fill(occupied, false);
+        LocalDateTime before = time.minusHours(2);
+        LocalDateTime after = time.plusHours(2);
+        for(Reservation r: reservations){
+            if(r.time.compareTo(before) > 0 && r.time.compareTo(after) < 0){
+                occupied[r.tableId] = true;
+            } else if(r.time.compareTo(after) > 0) break;
+        }
+        return occupied;
+    }
+
+    /**
+     * Removes expired reservations.
+     */
+    public void update() {
+        LocalDateTime pivot = LocalDateTime.now().minusHours(1);
+        while(!reservations.isEmpty()&&reservations.first().time.compareTo(pivot) < 0){
+            reservations.remove(reservations.first());
+        }
+    }
+
+    /**
+     * Prints table information to standard output in a user-friendly way.
+     */
+    public void printAllTables() {
+        boolean[] occupied = getAvailableTables(LocalDateTime.now());
+        System.out.print("Index\tCapacity\tAvailability\n");
+        for(int i = 0; i < tables.size(); i++){
+            System.out.printf("%d\t\t%d\t\t\t%d\n", i, tables.get(i), occupied[i] ? 0 : 1);
+        }
+    }
+
+    /**
+     * Prints active reservations to standard output in a user-friendly way.
+     */
+    public void printAllReservations() {
+        // TODO
+        update();
+        System.out.print("Time\t\t\tTableId\tPax\tContact\n");
+        for(Reservation r: reservations){
+            System.out.printf("%s\t%d\t%d\t%d\n", r.time.toString(), r.tableId, r.pax, r.contact);
+        }
+    }
+
+    public void loadReservations(){
+        try{
+            String fileName = "E:\\ntu\\y2s1\\CZ2002\\Assignment\\src\\restaurant\\reservations.txt";
+            BufferedReader br = new BufferedReader(new FileReader(fileName));
+            int numOfReservations = Integer.parseInt(br.readLine());
+            for(int i = 0; i < numOfReservations; i++){
+                String l = br.readLine();
+                String list[] = l.split(",");
+                LocalDateTime time = LocalDateTime.parse(list[0]);
+                int tableId = Integer.parseInt(list[1]);
+                int pax = Integer.parseInt(list[2]);
+                long contact = Long.parseLong(list[3]);
+                Reservation r = new Reservation(time, tableId, pax, contact);
+                addReservation(r);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        update();
+    }
+
+    public void saveReservations(){
+        update();
+        try{
+            String fileName = "E:\\ntu\\y2s1\\CZ2002\\Assignment\\src\\restaurant\\reservations.txt";
+            BufferedWriter wr = new BufferedWriter(new FileWriter(fileName));
+            wr.write(reservations.size() + "\n");
+
+            for(Reservation r: reservations){
+                wr.write(r.time.toString() + "," + r.tableId + "," + r.pax + ","+ r.contact + "\n");
+            }
+
+            wr.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadTables(){
+        try{
+            String fileName = "E:\\ntu\\y2s1\\CZ2002\\Assignment\\src\\restaurant\\tables.txt";
+            BufferedReader br = new BufferedReader(new FileReader(fileName));
+            int numOfTables = Integer.parseInt(br.readLine());
+            for(int i = 0; i < numOfTables; i++){
+                int capacity = Integer.parseInt(br.readLine());
+                tables.add(capacity);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveTables(){
+
+        try {
+            String fileName = "E:\\ntu\\y2s1\\CZ2002\\Assignment\\src\\restaurant\\tables.txt";
+            BufferedWriter bw = new BufferedWriter(new FileWriter(fileName));
+
+            int numOfTables = tables.size();
+            bw.write(numOfTables);
+            bw.write("\n");
+            for(int i = 0; i < numOfTables; i++){
+                bw.write(tables.get(i) + "\n");
+            }
+            bw.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+}

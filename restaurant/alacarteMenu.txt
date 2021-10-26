@@ -1,0 +1,52 @@
+6
+Appetiser
+3
+Truffle Mushroom Soup
+Button Mushroom, Truffle Oil, Fresh Cream and Croutons
+6
+Roasted Tomato Soup
+Oven-roasted Tomatoes, Garlic and Croutons
+5
+Charcoal-grilled Surme Ika (whole)
+Chargrilled Japanese Flying Squid in Teriyaki Sauce
+15
+Salad
+2
+Smoked Duck Salad
+Smoked Duck Breast, Japanese Cucumber, Cherry Tomato
+9
+Classic Casesar Salad
+Baby Romaine Lettuce, Egg, Croutons, Bacon and Parmesan Cheese
+8
+Pasta
+2
+Slipper Lobster Pasta
+Spaghetti, Splipper Loabster, Kombu and English Chives in Spiced Lobster oil
+20
+Carbonara
+Spaghetti, Bacon, Mushroom and Ham in Cream Sauce
+15
+Meat
+2
+Signature Roasted BBQ Pork Ribs
+Coleslaw, Cajun Fries, Corn Cob, Mesclun Salad with BBQ Sauce
+19
+Argentine Black Angus Ribeye Prime Steak (200g)
+Seasonal Vegetables, Potato Au Gratin, Pesto Cream and Black Pepper Sauces
+24
+Dessert
+2
+Tiramisu
+Classic Italian Dessert made with Expresso-soaked Ladyfiners and Mascarpone Cream
+8
+English Carrot Cake
+with Vanilla Ice Cream
+9
+Drinks
+2
+Milky Popcorn
+Japanese Sencha with Roasted Rice, popcorn with Butterscotch Aroma
+6
+Kiss on the Lips
+Grenadine, Soda, Orange Juice
+6

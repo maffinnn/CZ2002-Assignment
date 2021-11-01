@@ -268,12 +268,13 @@ public class RestaurantApp {
             case 6: 
                 System.out.println("Shut down the program? (Y/N)");
                 String cm = sc.next();
-                System.out.println(cm);
-                if ( cm == "Y" ||cm == "y") {
+                // == tests object references, .equals() tests the string values
+                if ( cm.equals("Y") || cm.equals("y")) {
                     myRestaurant.saveAll();
                     System.out.println("save all ... ");
+                    return;
                 }
-                return;
+                break;
             default: break;    
             }
         }while(op>0&&op<7);
@@ -441,7 +442,7 @@ public class RestaurantApp {
                 }
                 System.out.println("Are you a memeber of Restaurant 0.0? (Y/N): ");
                 String ans = sc.next();
-                if (ans == "Y"||ans == "y") ooo.printInvoice(true);
+                if (ans.equals("Y")||ans.equals("y")) ooo.printInvoice(true);
                 else ooo.printInvoice(false);
                 myRestaurant.activeOrders.remove(ooo);
                 myRestaurant.inactiveOrders.add(ooo);

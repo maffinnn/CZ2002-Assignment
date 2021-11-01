@@ -41,7 +41,6 @@ public class Reservation implements Comparable<Reservation>{
      * user-friendly way.
      */
     public void print() {
-        // TODO
         String t = time.toString();
         System.out.printf("time:%s\ttableId:%d\tpax:%d\tcontact:%d\n", t, tableId, pax, contact);
     }

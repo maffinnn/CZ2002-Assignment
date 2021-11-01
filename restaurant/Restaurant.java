@@ -3,6 +3,7 @@ package restaurant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.io.*;
 import java.util.Scanner;
@@ -35,8 +36,10 @@ public class Restaurant {
     public Restaurant() {
         menuReference = new HashMap<>();
         loadMenuReference();
+        System.out.println("loadMenuReference done");
         menu = new Menu(-1, "Menu", "");
         loadMenu();
+        System.out.println("loadMenu done");
         tableManager = new TableManager();
         staff = new HashMap<>();
         loadStaff();
@@ -121,8 +124,8 @@ public class Restaurant {
                     }
                     menuReference.put(itemCode, mb);
                 }
-               
             }
+            br.close();
         }catch(FileNotFoundException e){
             e.printStackTrace();
         }catch(IOException e){
@@ -147,10 +150,10 @@ public class Restaurant {
                 }
                 
             }
+            bw.close();
         }catch (IOException e){
             e.printStackTrace();
         }
-
     }
     
     private void loadMenu() {
@@ -169,6 +172,7 @@ public class Restaurant {
                     menu.getChild(i).addChild(menuReference.get(itemCode));
                 }
             }
+            br.close();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -190,9 +194,9 @@ public class Restaurant {
                 for(int j = 0; j < category.getChildrenCount(); j++){
                     MenuComponent item = category.getChild(j);
                     bw.write(item.code+"\n");
-                }
-                
+                } 
             }
+            bw.close();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -227,6 +231,7 @@ public class Restaurant {
                 }
                 activeOrders.add(curOrder);
             }
+            br.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -252,6 +257,7 @@ public class Restaurant {
                     bw.write(quantity+","+mc.code+"\n");
                 }
             }
+            bw.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -259,7 +265,7 @@ public class Restaurant {
         try {
             
             for(Order curOrder: inactiveOrders){
-                String filename = "restaurant\\historyOrder\\" + curOrder.reservation.time.toString()+".txt";
+                String filename = "restaurant\\historyOrders\\" + curOrder.reservation.time.truncatedTo(ChronoUnit.SECONDS).toString().replace(":","")+".txt";
                 BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
                 Reservation r = curOrder.reservation;
                 bw.write(r.time.toString() + "," + r.tableId + "," + r.pax + ","+ r.contact + "\n");
@@ -270,8 +276,8 @@ public class Restaurant {
                     MenuComponent mc = curOrder.orderedItems.getChild(i);
                     bw.write(mc.getQuantity()+","+mc.code+"\n");
                 }
+                bw.close();
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -292,6 +298,7 @@ public class Restaurant {
                 Staff curStaff = new Staff(name, id, title, gender);
                 staff.put(id, curStaff);
             }
+            br.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -308,6 +315,7 @@ public class Restaurant {
                 bw.write(curStaff.getName() + "\n");
                 bw.write(curStaff.getId() + "," + curStaff.getTitle() + "," + curStaff.getGender() + "\n");
             }
+            bw.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -347,6 +355,7 @@ public class Restaurant {
                     o.addItem(menuReference.get(itemCode), quantity);
                 }
                 historyOrders.add(o);
+                br.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }

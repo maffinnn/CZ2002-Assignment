@@ -1,4 +1,5 @@
 package restaurant;
+
 import java.util.ArrayList;
 
 /**
@@ -33,7 +34,7 @@ public class MenuBundle extends MenuComponent {
         children = new ArrayList<>();
     }
 
-    public MenuBundle(MenuBundle mb){
+    public MenuBundle(MenuBundle mb) {
         this(mb.code, mb.name, mb.description);
         children = new ArrayList<>(mb.children);
         this.price = mb.price;
@@ -58,7 +59,7 @@ public class MenuBundle extends MenuComponent {
         this.price = price;
     }
 
-    public double getTotalPrice(){
+    public double getTotalPrice() {
         return price * quantity;
     }
 
@@ -88,10 +89,10 @@ public class MenuBundle extends MenuComponent {
      * @throws IllegalArgumentException If the index is out of range.
      */
     public MenuComponent getChild(int index) {
-        if(index < 0 || index > children.size()){
+        if (index < 0 || index >= children.size()) {
             throw new IllegalArgumentException();
-        }
-        else return children.get(index);
+        } else
+            return children.get(index);
     }
 
     /**
@@ -119,27 +120,28 @@ public class MenuBundle extends MenuComponent {
      * @throws IllegalArgumentException If the index is out of range.
      */
     public void removeChild(int index) {
-        if(index < 0 || index > children.size()){
+        if (index < 0 || index >= children.size()) {
             throw new IllegalArgumentException();
-        }
-        else children.remove(index);
+        } else
+            children.remove(index);
     }
 
     /**
-     * Prints the content of the bundle to standard output in a user-friendly
-     * way.
+     * Prints the content of the bundle to standard output in a user-friendly way.
      */
     public void print() {
         System.out.printf("%d\t%s\t%.2f\n", quantity, name, getTotalPrice());
-        for(MenuComponent mc: children){
+        for (MenuComponent mc : children) {
             System.out.printf("\t%s\n", mc.name);
         }
     }
 
-    public boolean equals(Object o){
-        if(this == o) return true;
-        if(o instanceof MenuBundle mb){
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o instanceof MenuBundle mb) {
             return this.name.compareTo(mb.name) == 0 && this.price == mb.price;
-        } else return false;
+        } else
+            return false;
     }
 }

@@ -1,4 +1,5 @@
 package restaurant;
+
 /**
  * Restaurant staff information. {@link Staff} objects are immutable.
  *

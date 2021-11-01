@@ -8,7 +8,6 @@ import java.util.*;
 import java.io.*;
 import java.util.Scanner;
 
-
 /**
  * Restaurant class bundles different systems in the restaurant. The class
  * itself doesn't do a lot.
@@ -18,6 +17,7 @@ import java.util.Scanner;
  * @version 0.0
  */
 public class Restaurant {
+
     public Menu menu;
 
     public HashMap<Integer, MenuComponent> menuReference;
@@ -31,7 +31,6 @@ public class Restaurant {
     public HashMap<Integer, Staff> staff;
 
     public TreeSet<Order> historyOrders;
-
 
     public Restaurant() {
         menuReference = new HashMap<>();
@@ -47,7 +46,7 @@ public class Restaurant {
         loadOrder();
         inactiveOrders = new ArrayList<>();
         historyOrders = new TreeSet<>();
-        
+
     }
 
     /**
@@ -59,11 +58,11 @@ public class Restaurant {
         return activeOrders;
     }
 
-    public Order getOrderbytableId(int tableId){
+    public Order getOrderbytableId(int tableId) {
         int n = activeOrders.size();
         Order o = null;
-        for (int i = 0; i< n; i++){
-            if (activeOrders.get(i).getTableId() == tableId){
+        for (int i = 0; i < n; i++) {
+            if (activeOrders.get(i).getTableId() == tableId) {
                 o = activeOrders.get(i);
                 break;
             }
@@ -78,13 +77,13 @@ public class Restaurant {
      */
     public SalesReport generateSalesReport(LocalDate from, LocalDate to) {
         SalesReport report = new SalesReport(from, to);
-        if(historyOrders == null) 
+        if (historyOrders == null)
             loadhistoryOrders();
 
         Iterator it = historyOrders.iterator();
-        for (;it.hasNext();){
-            Order o = (Order)it.next();
-            if (o.reservation.time.toLocalDate().compareTo(from)>=0 && o.reservation.time.toLocalDate().compareTo(to)<=0){
+        for (; it.hasNext();) {
+            Order o = (Order) it.next();
+            if (o.reservation.time.toLocalDate().isAfter(from) && o.reservation.time.toLocalDate().isBefore(to)) {
                 report.processOrder(o);
             }
         }
@@ -92,24 +91,24 @@ public class Restaurant {
     }
 
     // All save and load functions
-    public void loadMenuReference(){
-        try{
+    public void loadMenuReference() {
+        try {
             String fileName = "restaurant\\MenuReference.txt";
             BufferedReader br = new BufferedReader(new FileReader(fileName));
             String l;
-            while((l = br.readLine()) != null){
+            while ((l = br.readLine()) != null) {
                 String[] temp = l.split(":");
                 int itemCode = Integer.parseInt(temp[0]);
                 int flag = Integer.parseInt(temp[1]);
-                if (flag == 0){
+                if (flag == 0) {
                     // alacarte item
                     String itemName = temp[2];
                     Double price = Double.parseDouble(temp[3]);
                     String itemDescription = temp[4];
                     MenuLeaf ml = new MenuLeaf(itemCode, itemName, itemDescription);
                     ml.setPrice(price);
-                    menuReference.put(itemCode,ml);
-                }else{
+                    menuReference.put(itemCode, ml);
+                } else {
                     // bundle item
                     /* assumed always the component of the bundle item has alreay been parsed */
                     String itemName = temp[2];
@@ -118,7 +117,7 @@ public class Restaurant {
                     mb.setPrice(price);
                     String[] bundleItems = temp[4].split(",");
                     int numOfItems = bundleItems.length;
-                    for (int i =0; i< numOfItems; i++){
+                    for (int i = 0; i < numOfItems; i++) {
                         int childCode = Integer.parseInt(bundleItems[i]);
                         mb.addChild(menuReference.get(childCode));
                     }
@@ -126,48 +125,47 @@ public class Restaurant {
                 }
             }
             br.close();
-        }catch(FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void saveMenuReference(){
-        try{
+    public void saveMenuReference() {
+        try {
             String fileName = "restaurant\\MenuReference.txt";
             BufferedWriter bw = new BufferedWriter(new FileWriter(fileName));
-            for (MenuComponent mc : menuReference.values()){
-                if (mc instanceof MenuLeaf){
-                    bw.write(mc.code+":0:"+mc.name+":"+mc.getPrice()+":"+mc.description+"\n");
-                }else{
-                    String t = mc.code+":1:"+mc.name+":"+mc.getPrice()+":";
-                    
-                    for (int i =0 ; i<mc.getChildrenCount(); i++){
-                        t = t + mc.getChild(i).code+",";
+            for (MenuComponent mc : menuReference.values()) {
+                if (mc instanceof MenuLeaf) {
+                    bw.write(mc.code + ":0:" + mc.name + ":" + mc.getPrice() + ":" + mc.description + "\n");
+                } else {
+                    String t = mc.code + ":1:" + mc.name + ":" + mc.getPrice() + ":";
+
+                    for (int i = 0; i < mc.getChildrenCount(); i++) {
+                        t = t + mc.getChild(i).code + ",";
                     }
-                    bw.write(t.substring(0, t.length()-1)+"\n");
+                    bw.write(t.substring(0, t.length() - 1) + "\n");
                 }
-                
+
             }
             bw.close();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    
-    private void loadMenu() {
 
-        try{
+    private void loadMenu() {
+        try {
             String fileName = "restaurant\\Menu.txt";
 
             BufferedReader br = new BufferedReader(new FileReader(fileName));
             int numOfCategory = Integer.parseInt(br.readLine());
-            for(int i = 0; i < numOfCategory; i++){
+            for (int i = 0; i < numOfCategory; i++) {
                 String categoryName = br.readLine();
                 menu.addChild(new Menu(-1, categoryName, ""));
                 int numOfItems = Integer.parseInt(br.readLine());
-                for(int j = 0; j < numOfItems; j++){
+                for (int j = 0; j < numOfItems; j++) {
                     int itemCode = Integer.parseInt(br.readLine());
                     menu.getChild(i).addChild(menuReference.get(itemCode));
                 }
@@ -190,11 +188,11 @@ public class Restaurant {
             for (int i = 0; i < menu.getChildrenCount(); i++) {
                 MenuComponent category = menu.getChild(i);
                 bw.write(category.name + "\n");
-                bw.write(category.getChildrenCount() +"\n");
-                for(int j = 0; j < category.getChildrenCount(); j++){
+                bw.write(category.getChildrenCount() + "\n");
+                for (int j = 0; j < category.getChildrenCount(); j++) {
                     MenuComponent item = category.getChild(j);
-                    bw.write(item.code+"\n");
-                } 
+                    bw.write(item.code + "\n");
+                }
             }
             bw.close();
 
@@ -203,13 +201,13 @@ public class Restaurant {
         }
     }
 
-    private void loadOrder(){
-        try{
+    private void loadOrder() {
+        try {
             String fileName = "restaurant\\activeOrders.txt";
 
             BufferedReader br = new BufferedReader(new FileReader(fileName));
             int numOfOrders = Integer.parseInt(br.readLine());
-            for(int i = 0; i < numOfOrders; i++){
+            for (int i = 0; i < numOfOrders; i++) {
                 String l = br.readLine();
                 String[] list = l.split(",");
                 LocalDateTime time = LocalDateTime.parse(list[0]);
@@ -222,7 +220,7 @@ public class Restaurant {
                 Staff s = staff.get(staffId);
                 Order curOrder = new Order(r, s);
                 int n = Integer.parseInt(br.readLine());
-                for(int j = 0; j < n; j++){
+                for (int j = 0; j < n; j++) {
                     l = br.readLine();
                     String[] temp = l.split(",");
                     int quantity = Integer.parseInt(temp[0]);
@@ -240,21 +238,21 @@ public class Restaurant {
 
     }
 
-    private void saveOrder(){
+    private void saveOrder() {
         // save active orders
         try {
             String filename = "restaurant\\activeOrders.txt";
             BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
-            bw.write(activeOrders.size()+"\n");
-            for(Order curOrder: activeOrders){
+            bw.write(activeOrders.size() + "\n");
+            for (Order curOrder : activeOrders) {
                 Reservation r = curOrder.reservation;
-                bw.write(r.time.toString() + "," + r.tableId + "," + r.pax + ","+ r.contact + "\n");
+                bw.write(r.time.toString() + "," + r.tableId + "," + r.pax + "," + r.contact + "\n");
                 bw.write(curOrder.getStaffId() + "\n");
                 bw.write(curOrder.orderedItems.getChildrenCount() + "\n");
-                for(int i = 0; i < curOrder.orderedItems.getChildrenCount(); i++){
+                for (int i = 0; i < curOrder.orderedItems.getChildrenCount(); i++) {
                     MenuComponent mc = curOrder.orderedItems.getChild(i);
                     int quantity = mc.getQuantity();
-                    bw.write(quantity+","+mc.code+"\n");
+                    bw.write(quantity + "," + mc.code + "\n");
                 }
             }
             bw.close();
@@ -263,18 +261,20 @@ public class Restaurant {
         }
         // save history orders
         try {
-            
-            for(Order curOrder: inactiveOrders){
-                String filename = "restaurant\\historyOrders\\" + curOrder.reservation.time.truncatedTo(ChronoUnit.SECONDS).toString().replace(":","")+".txt";
+
+            for (Order curOrder : inactiveOrders) {
+                String filename = "restaurant\\historyOrders\\"
+                        + curOrder.reservation.time.truncatedTo(ChronoUnit.SECONDS).toString().replace(":", "")
+                        + ".txt";
                 BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
                 Reservation r = curOrder.reservation;
-                bw.write(r.time.toString() + "," + r.tableId + "," + r.pax + ","+ r.contact + "\n");
+                bw.write(r.time.toString() + "," + r.tableId + "," + r.pax + "," + r.contact + "\n");
                 bw.write(curOrder.getStaffId() + "\n");
                 bw.write(curOrder.getTotalPrice() + "\n");
                 bw.write(curOrder.orderedItems.getChildrenCount() + "\n");
-                for(int i = 0; i < curOrder.orderedItems.getChildrenCount(); i++){
+                for (int i = 0; i < curOrder.orderedItems.getChildrenCount(); i++) {
                     MenuComponent mc = curOrder.orderedItems.getChild(i);
-                    bw.write(mc.getQuantity()+","+mc.code+"\n");
+                    bw.write(mc.getQuantity() + "," + mc.code + "\n");
                 }
                 bw.close();
             }
@@ -284,12 +284,12 @@ public class Restaurant {
 
     }
 
-    private void loadStaff(){
+    private void loadStaff() {
         try {
             String fileName = "restaurant\\staff.txt";
             BufferedReader br = new BufferedReader(new FileReader(fileName));
             int numOfStaff = Integer.parseInt(br.readLine());
-            for(int i = 0; i < numOfStaff; i++){
+            for (int i = 0; i < numOfStaff; i++) {
                 String name = br.readLine();
                 String[] list = br.readLine().split(",");
                 int id = Integer.parseInt(list[0]);
@@ -306,12 +306,12 @@ public class Restaurant {
         }
     }
 
-    private void saveStaff(){
+    private void saveStaff() {
         try {
             String filename = "restaurant\\staff.txt";
             BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
-            bw.write(staff.size() +"\n");
-            for(Staff curStaff: staff.values()){
+            bw.write(staff.size() + "\n");
+            for (Staff curStaff : staff.values()) {
                 bw.write(curStaff.getName() + "\n");
                 bw.write(curStaff.getId() + "," + curStaff.getTitle() + "," + curStaff.getGender() + "\n");
             }
@@ -321,20 +321,20 @@ public class Restaurant {
         }
     }
 
-    public void saveAll(){
+    public void saveAll() {
         saveMenuReference();
         saveMenu();
         saveOrder();
         saveStaff();
     }
 
-    public void loadhistoryOrders(){
+    public void loadhistoryOrders() {
         String pathName = "restaurant\\historyOrders\\";
 
         File file = new File(pathName);
         File[] fileList = file.listFiles();
-        
-        for (int i =0; i<fileList.length; i++){
+
+        for (int i = 0; i < fileList.length; i++) {
             try {
                 BufferedReader br = new BufferedReader(new FileReader(fileList[i]));
                 String l = br.readLine();
@@ -348,7 +348,7 @@ public class Restaurant {
                 int numOfItems = Integer.parseInt(br.readLine());
                 Reservation r = new Reservation(time, tableId, pax, contact);
                 Order o = new Order(r, staff.get(staffId));
-                for (int j = 0; j< numOfItems; j++) {
+                for (int j = 0; j < numOfItems; j++) {
                     String[] t = br.readLine().split(",");
                     int quantity = Integer.parseInt(t[0]);
                     int itemCode = Integer.parseInt(t[1]);
@@ -359,10 +359,9 @@ public class Restaurant {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-           
+
         }
 
     }
-
 
 }

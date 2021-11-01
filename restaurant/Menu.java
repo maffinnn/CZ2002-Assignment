@@ -1,4 +1,5 @@
 package restaurant;
+
 import java.util.ArrayList;
 
 /**
@@ -17,7 +18,8 @@ public class Menu extends MenuComponent {
     private ArrayList<MenuComponent> children;
 
     /**
-     * @param code        The code of the component. Code equals -1 means is a category
+     * @param code        The code of the component. Code equals -1 means is a
+     *                    category
      * @param name        The name of the component.
      * @param description The description of the component.
      */
@@ -63,14 +65,14 @@ public class Menu extends MenuComponent {
      * @throws IllegalArgumentException If the index is out of range.
      */
     public void removeChild(int index) {
-        if(index < 0 || index > children.size()){
+        if (index < 0 || index >= children.size()) {
             throw new IllegalArgumentException();
-        } else children.remove(index);
+        }
+        children.remove(index);
     }
 
     /**
-     * Prints the content of the menu to standard output in a user-friendly
-     * way.
+     * Prints the content of the menu to standard output in a user-friendly way.
      */
     public void print() {
         // TODO

@@ -1,4 +1,5 @@
 package restaurant;
+
 /**
  * The individual items in restaurant menu.
  *
@@ -17,15 +18,16 @@ public class MenuLeaf extends MenuComponent {
      */
     private int quantity;
 
-    public MenuLeaf(int code, String name, String description){
+    public MenuLeaf(int code, String name, String description) {
         super(code, name, description);
     }
-    public MenuLeaf(int code, String name, String description, double price){
+
+    public MenuLeaf(int code, String name, String description, double price) {
         super(code, name, description);
         this.price = price;
     }
 
-    public MenuLeaf(MenuLeaf mf){
+    public MenuLeaf(MenuLeaf mf) {
         this(mf.code, mf.name, mf.description, mf.price);
     }
 
@@ -73,16 +75,13 @@ public class MenuLeaf extends MenuComponent {
      * @param quantity The quantity of the item.
      */
     public void setQuantity(int quantity) {
-        // TODO
         this.quantity = quantity;
     }
 
     /**
-     * Prints the content of the item to standard output in a user-friendly
-     * way.
+     * Prints the content of the item to standard output in a user-friendly way.
      */
     public void print() {
-        // TODO
         System.out.printf("%d\t%s\t%.2f\n", quantity, name, getTotalPrice());
     }
 }

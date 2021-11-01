@@ -1,9 +1,9 @@
 package restaurant;
+
 /**
  * The base class for all menu related classes ({@link Menu},
- * {@link BundleItem}, {@link MenuLeaf}). These classes constitutes a
- * composite pattern with {@link MenuComponent} serving as the uniformed
- * interface.
+ * {@link BundleItem}, {@link MenuLeaf}). These classes constitutes a composite
+ * pattern with {@link MenuComponent} serving as the uniformed interface.
  *
  * @author owl
  * @author TODO
@@ -46,8 +46,9 @@ public abstract class MenuComponent {
         throw new UnsupportedOperationException();
     }
 
-
-    public double getTotalPrice(){throw new UnsupportedOperationException();}
+    public double getTotalPrice() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Sets the price of the component.
@@ -137,8 +138,5 @@ public abstract class MenuComponent {
     public void print() {
         System.out.println(this.name + ": " + this.description);
     }
-
-
-
 
 }

@@ -50,12 +50,13 @@ public class Order {
     private Staff staff;
 
     /**
-     * The total sales price per order 
+     * The total sales price per order
      */
     private double totalPrice;
 
     // Disable default constructor.
-    private Order() { }
+    private Order() {
+    }
 
     /**
      * Construct an order from a reservation.
@@ -69,13 +70,13 @@ public class Order {
         this.reservation = reservation;
         reservation.time = LocalDateTime.now();
         this.staff = staff;
-        orderedItems = new Menu(-1, reservation.time.toString(),"");
+        orderedItems = new Menu(-1, reservation.time.toString(), "");
         active = true;
     }
 
-    public void addItem(MenuComponent item, int quantity){
+    public void addItem(MenuComponent item, int quantity) {
 
-        if(item instanceof MenuBundle){
+        if (item instanceof MenuBundle) {
             MenuBundle mb = new MenuBundle((MenuBundle) item);
             mb.setQuantity(quantity);
             orderedItems.addChild(mb);
@@ -84,19 +85,20 @@ public class Order {
             ml.setQuantity(quantity);
             orderedItems.addChild(ml);
         }
-        
+
     }
 
-    public int getTableId(){
+    public int getTableId() {
         return reservation.tableId;
     }
 
-    public int getItemIndex(int itemCode){
+    public int getItemIndex(int itemCode) {
         int ret = -1;
         int n = orderedItems.getChildrenCount();
-        for(int i =0 ;i<n ;i++){
-            if (orderedItems.getChild(i).code == itemCode){
-                ret = i; break;
+        for (int i = 0; i < n; i++) {
+            if (orderedItems.getChild(i).code == itemCode) {
+                ret = i;
+                break;
             }
         }
         return ret;
@@ -115,11 +117,10 @@ public class Order {
         System.out.printf("Time:%s\n", t);
         System.out.println("--------------------------------------");
         totalPrice = 0;
-        for(int i = 0; i < orderedItems.getChildrenCount(); i++){
+        for (int i = 0; i < orderedItems.getChildrenCount(); i++) {
             MenuComponent mc = orderedItems.getChild(i);
             int quantity = mc.getQuantity();
-            System.out.printf("%d\t%s\t%.2f\n",
-                quantity,mc.name, mc.getPrice()*quantity);
+            System.out.printf("%d\t%s\t%.2f\n", quantity, mc.name, mc.getPrice() * quantity);
             totalPrice += mc.getTotalPrice();
         }
         System.out.println("--------------------------------------");
@@ -133,14 +134,15 @@ public class Order {
      * set the order to inactive.
      */
     public void printInvoice(boolean isMember) {
-        if(!active) return;
+        if (!active)
+            return;
         active = false;
         print();
 
-        if(isMember){
+        if (isMember) {
             double discount = totalPrice * discountRate;
             totalPrice -= discount;
-            System.out.printf("Membership discount:\t%.2f\n", discount);
+            System.out.printf("\tMembership discount:\t%.2f\n", discount);
         }
 
         double serviceCharge = totalPrice * 0.1;
@@ -149,18 +151,17 @@ public class Order {
         System.out.printf("\t\tService Charge:\t%.2f\n", serviceCharge);
         System.out.printf("\t\tTax:\t%.2f\n", tax);
 
-
         System.out.printf("\t\tTOTAL:\t%.2f\n", totalPrice + serviceCharge + tax);
 
         reservation.time = LocalDateTime.now();
-        
+
     }
 
-    public double getTotalPrice(){
+    public double getTotalPrice() {
         return totalPrice;
     }
-    
-    public int getStaffId(){
+
+    public int getStaffId() {
         return staff.getId();
     }
 }

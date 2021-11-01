@@ -1,4 +1,5 @@
 package restaurant;
+
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class TableManager {
      */
     private TreeSet<Reservation> reservations;
 
-    public TableManager(){
+    public TableManager() {
         tables = new ArrayList<>();
         reservations = new TreeSet<>();
         loadReservations();
@@ -40,9 +41,10 @@ public class TableManager {
      */
     public int getTableCapacity(int id) {
         // TODO
-        if(id < 0||id>tables.size()){
+        if (id < 0 || id > tables.size()) {
             throw new IllegalArgumentException();
-        } else return tables.get(id);
+        } else
+            return tables.get(id);
     }
 
     /**
@@ -82,19 +84,19 @@ public class TableManager {
      */
     public ArrayList<Reservation> getReservation(long contact) {
         ArrayList<Reservation> resultList = new ArrayList<>();
-        
-        for(Reservation r: reservations){
-            if(r.contact == contact){
+
+        for (Reservation r : reservations) {
+            if (r.contact == contact) {
                 resultList.add(r);
             }
         }
         return resultList;
     }
 
-    public ArrayList<Reservation> getReservations(int tableId){
+    public ArrayList<Reservation> getReservations(int tableId) {
         ArrayList<Reservation> resultList = new ArrayList<>();
-        for (Reservation r: reservations){
-            if (r.tableId == tableId){
+        for (Reservation r : reservations) {
+            if (r.tableId == tableId) {
                 resultList.add(r);
                 break;
             }
@@ -133,24 +135,25 @@ public class TableManager {
         // TODO
         ArrayList<Integer> tableIndex = new ArrayList<>();
         boolean occupied[] = getAvailableTables(time);
-        for(int i = 0; i < tables.size(); i++){
-            if(!occupied[i] && tables.get(i) >= pax) {
+        for (int i = 0; i < tables.size(); i++) {
+            if (!occupied[i] && tables.get(i) >= pax) {
                 tableIndex.add(i);
             }
         }
         return tableIndex;
     }
 
-    public boolean[] getAvailableTables(LocalDateTime time){
+    public boolean[] getAvailableTables(LocalDateTime time) {
         update();
         boolean[] occupied = new boolean[tables.size()];
         Arrays.fill(occupied, false);
         LocalDateTime before = time.minusHours(2);
         LocalDateTime after = time.plusHours(2);
-        for(Reservation r: reservations){
-            if(r.time.compareTo(before) > 0 && r.time.compareTo(after) < 0){
+        for (Reservation r : reservations) {
+            if (r.time.compareTo(before) > 0 && r.time.compareTo(after) < 0) {
                 occupied[r.tableId] = true;
-            } else if(r.time.compareTo(after) > 0) break;
+            } else if (r.time.compareTo(after) > 0)
+                break;
         }
         return occupied;
     }
@@ -160,7 +163,7 @@ public class TableManager {
      */
     public void update() {
         LocalDateTime pivot = LocalDateTime.now().minusHours(1);
-        while(!reservations.isEmpty()&&reservations.first().time.compareTo(pivot) < 0){
+        while (!reservations.isEmpty() && reservations.first().time.compareTo(pivot) < 0) {
             reservations.remove(reservations.first());
         }
     }
@@ -171,7 +174,7 @@ public class TableManager {
     public void printAllTables() {
         boolean[] occupied = getAvailableTables(LocalDateTime.now());
         System.out.print("Index\t\tCapacity\tAvailability\n");
-        for(int i = 0; i < tables.size(); i++){
+        for (int i = 0; i < tables.size(); i++) {
             System.out.printf("%d\t\t%d\t\t\t%d\n", i, tables.get(i), occupied[i] ? 0 : 1);
         }
     }
@@ -182,17 +185,17 @@ public class TableManager {
     public void printAllReservations() {
         update();
         System.out.print("Time\t\t\tTableId\tPax\tContact\n");
-        for(Reservation r: reservations){
+        for (Reservation r : reservations) {
             System.out.printf("%s\t%d\t%d\t%d\n", r.time.toString(), r.tableId, r.pax, r.contact);
         }
     }
 
-    public void loadReservations(){
-        try{
+    public void loadReservations() {
+        try {
             String fileName = "restaurant\\reservations.txt";
             BufferedReader br = new BufferedReader(new FileReader(fileName));
             int numOfReservations = Integer.parseInt(br.readLine());
-            for(int i = 0; i < numOfReservations; i++){
+            for (int i = 0; i < numOfReservations; i++) {
                 String l = br.readLine();
                 String list[] = l.split(",");
                 LocalDateTime time = LocalDateTime.parse(list[0]);
@@ -210,15 +213,15 @@ public class TableManager {
         update();
     }
 
-    public void saveReservations(){
+    public void saveReservations() {
         update();
-        try{
+        try {
             String fileName = "restaurant\\reservations.txt";
             BufferedWriter wr = new BufferedWriter(new FileWriter(fileName));
             wr.write(reservations.size() + "\n");
 
-            for(Reservation r: reservations){
-                wr.write(r.time.toString() + "," + r.tableId + "," + r.pax + ","+ r.contact + "\n");
+            for (Reservation r : reservations) {
+                wr.write(r.time.toString() + "," + r.tableId + "," + r.pax + "," + r.contact + "\n");
             }
 
             wr.close();
@@ -229,12 +232,12 @@ public class TableManager {
         }
     }
 
-    public void loadTables(){
-        try{
+    public void loadTables() {
+        try {
             String fileName = "restaurant\\tables.txt";
             BufferedReader br = new BufferedReader(new FileReader(fileName));
             int numOfTables = Integer.parseInt(br.readLine());
-            for(int i = 0; i < numOfTables; i++){
+            for (int i = 0; i < numOfTables; i++) {
                 int capacity = Integer.parseInt(br.readLine());
                 tables.add(capacity);
             }
@@ -245,7 +248,7 @@ public class TableManager {
         }
     }
 
-    public void saveTables(){
+    public void saveTables() {
 
         try {
             String fileName = "restaurant\\tables.txt";
@@ -254,7 +257,7 @@ public class TableManager {
             int numOfTables = tables.size();
             bw.write(numOfTables);
             bw.write("\n");
-            for(int i = 0; i < numOfTables; i++){
+            for (int i = 0; i < numOfTables; i++) {
                 bw.write(tables.get(i) + "\n");
             }
             bw.close();
@@ -263,6 +266,5 @@ public class TableManager {
             e.printStackTrace();
         }
     }
-
 
 }

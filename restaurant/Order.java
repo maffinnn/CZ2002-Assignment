@@ -15,11 +15,11 @@ public class Order {
     /**
      * A menu contains the ordered items and quantity.
      */
-    public Menu order;
+    public Menu orderedItems;
 
     // Making order menu private doesn't make sense since Menu class already handles
     // all the functions needed.
-    // TODO Unlike the order menu above, discountRate could be private, but I'm too
+    // Unlike the order menu above, discountRate could be private, but I'm too
     // lazy to write getter and setters now.
 
     /**
@@ -69,17 +69,37 @@ public class Order {
         this.reservation = reservation;
         reservation.time = LocalDateTime.now();
         this.staff = staff;
-        order = new Menu(reservation.time.toString(),"");
+        orderedItems = new Menu(-1, reservation.time.toString(),"");
         active = true;
     }
 
     public void addItem(MenuComponent item, int quantity){
+
         if(item instanceof MenuBundle){
-            order.addChild(new MenuBundle((MenuBundle) item));
+            MenuBundle mb = new MenuBundle((MenuBundle) item);
+            mb.setQuantity(quantity);
+            orderedItems.addChild(mb);
         } else {
-            order.addChild(new MenuLeaf((MenuLeaf) item));
+            MenuLeaf ml = new MenuLeaf((MenuLeaf) item);
+            ml.setQuantity(quantity);
+            orderedItems.addChild(ml);
         }
-        item.setQuantity(quantity);
+        
+    }
+
+    public int getTableId(){
+        return reservation.tableId;
+    }
+
+    public int getItemIndex(int itemCode){
+        int ret = -1;
+        int n = orderedItems.getChildrenCount();
+        for(int i =0 ;i<n ;i++){
+            if (orderedItems.getChild(i).code == itemCode){
+                ret = i; break;
+            }
+        }
+        return ret;
     }
 
     /**
@@ -87,20 +107,25 @@ public class Order {
      * way.
      */
     public void print() {
-        // TODO
+
+        System.out.println("\n==========================================");
         System.out.println("Restaurant 0.0");
         System.out.printf("Server:%s\t\tTable:%d\n", staff.getId(), reservation.tableId);
         String t = String.join(" ", reservation.time.toString().split("T"));
         System.out.printf("Time:%s\n", t);
         System.out.println("--------------------------------------");
         totalPrice = 0;
-        for(int i = 0; i < order.getChildrenCount(); i++){
-            order.getChild(i).print();
-            totalPrice += order.getChild(i).getTotalPrice();
+        for(int i = 0; i < orderedItems.getChildrenCount(); i++){
+            MenuComponent mc = orderedItems.getChild(i);
+            int quantity = mc.getQuantity();
+            System.out.printf("%d\t%s\t%.2f\n",
+                quantity,mc.name, mc.getPrice()*quantity);
+            totalPrice += mc.getTotalPrice();
         }
         System.out.println("--------------------------------------");
 
         System.out.printf("\t\tSub-Total:\t%.2f\n", totalPrice);
+        System.out.println("==========================================\n");
     }
 
     /**
@@ -126,12 +151,15 @@ public class Order {
 
 
         System.out.printf("\t\tTOTAL:\t%.2f\n", totalPrice + serviceCharge + tax);
+
+        reservation.time = LocalDateTime.now();
+        
     }
 
     public double getTotalPrice(){
         return totalPrice;
     }
-
+    
     public int getStaffId(){
         return staff.getId();
     }

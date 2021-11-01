@@ -17,11 +17,12 @@ public class Menu extends MenuComponent {
     private ArrayList<MenuComponent> children;
 
     /**
+     * @param code        The code of the component. Code equals -1 means is a category
      * @param name        The name of the component.
      * @param description The description of the component.
      */
-    public Menu(String name, String description) {
-        super(name, description);
+    public Menu(int code, String name, String description) {
+        super(code, name, description);
         children = new ArrayList<>();
     }
 
@@ -33,7 +34,6 @@ public class Menu extends MenuComponent {
      * @throws IllegalArgumentException If the index is out of range.
      */
     public MenuComponent getChild(int index) {
-        // TODO
         return children.get(index);
     }
 
@@ -43,7 +43,6 @@ public class Menu extends MenuComponent {
      * @return The number of children in the menu.
      */
     public int getChildrenCount() {
-        // TODO
         return children.size();
     }
 
@@ -53,7 +52,6 @@ public class Menu extends MenuComponent {
      * @param child The component to be added as a child.
      */
     public void addChild(MenuComponent child) {
-        // TODO
         children.add(child);
     }
 
@@ -65,7 +63,6 @@ public class Menu extends MenuComponent {
      * @throws IllegalArgumentException If the index is out of range.
      */
     public void removeChild(int index) {
-        // TODO
         if(index < 0 || index > children.size()){
             throw new IllegalArgumentException();
         } else children.remove(index);

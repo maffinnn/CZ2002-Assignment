@@ -11,6 +11,10 @@ package restaurant;
  */
 public abstract class MenuComponent {
     /**
+     * The code of the component.
+     */
+    public int code;
+    /**
      * The name of the component.
      */
     public String name;
@@ -24,7 +28,8 @@ public abstract class MenuComponent {
      * @param name        The name of the component.
      * @param description The description of the component.
      */
-    public MenuComponent(String name, String description) {
+    public MenuComponent(int code, String name, String description) {
+        this.code = code;
         this.name = name;
         this.description = description;
     }

@@ -51,7 +51,6 @@ public class TableManager {
      * @return The number of tables in the restaurant.
      */
     public int getTableCount() {
-        // TODO
         return tables.size();
     }
 
@@ -61,7 +60,6 @@ public class TableManager {
      * @param capacity The capacity of the table to be added.
      */
     public void addTable(int capacity) {
-        // TODO
         tables.add(capacity);
     }
 
@@ -118,7 +116,6 @@ public class TableManager {
      * Removes the given reservation, if exists.
      */
     public void removeReservation(Reservation reservation) {
-        // TODO
         reservations.remove(reservation);
     }
 
@@ -173,7 +170,7 @@ public class TableManager {
      */
     public void printAllTables() {
         boolean[] occupied = getAvailableTables(LocalDateTime.now());
-        System.out.print("Index\tCapacity\tAvailability\n");
+        System.out.print("Index\t\tCapacity\tAvailability\n");
         for(int i = 0; i < tables.size(); i++){
             System.out.printf("%d\t\t%d\t\t\t%d\n", i, tables.get(i), occupied[i] ? 0 : 1);
         }
@@ -183,7 +180,6 @@ public class TableManager {
      * Prints active reservations to standard output in a user-friendly way.
      */
     public void printAllReservations() {
-        // TODO
         update();
         System.out.print("Time\t\t\tTableId\tPax\tContact\n");
         for(Reservation r: reservations){
@@ -193,7 +189,7 @@ public class TableManager {
 
     public void loadReservations(){
         try{
-            String fileName = "E:\\ntu\\y2s1\\CZ2002\\Assignment\\src\\restaurant\\reservations.txt";
+            String fileName = "restaurant\\reservations.txt";
             BufferedReader br = new BufferedReader(new FileReader(fileName));
             int numOfReservations = Integer.parseInt(br.readLine());
             for(int i = 0; i < numOfReservations; i++){
@@ -217,7 +213,7 @@ public class TableManager {
     public void saveReservations(){
         update();
         try{
-            String fileName = "E:\\ntu\\y2s1\\CZ2002\\Assignment\\src\\restaurant\\reservations.txt";
+            String fileName = "restaurant\\reservations.txt";
             BufferedWriter wr = new BufferedWriter(new FileWriter(fileName));
             wr.write(reservations.size() + "\n");
 
@@ -235,7 +231,7 @@ public class TableManager {
 
     public void loadTables(){
         try{
-            String fileName = "E:\\ntu\\y2s1\\CZ2002\\Assignment\\src\\restaurant\\tables.txt";
+            String fileName = "restaurant\\tables.txt";
             BufferedReader br = new BufferedReader(new FileReader(fileName));
             int numOfTables = Integer.parseInt(br.readLine());
             for(int i = 0; i < numOfTables; i++){
@@ -252,7 +248,7 @@ public class TableManager {
     public void saveTables(){
 
         try {
-            String fileName = "E:\\ntu\\y2s1\\CZ2002\\Assignment\\src\\restaurant\\tables.txt";
+            String fileName = "restaurant\\tables.txt";
             BufferedWriter bw = new BufferedWriter(new FileWriter(fileName));
 
             int numOfTables = tables.size();

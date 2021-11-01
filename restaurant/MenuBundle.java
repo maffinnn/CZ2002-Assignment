@@ -28,13 +28,13 @@ public class MenuBundle extends MenuComponent {
      * @param name        The name of the component.
      * @param description The description of the component.
      */
-    public MenuBundle(String name, String description) {
-        super(name, description);
+    public MenuBundle(int code, String name, String description) {
+        super(code, name, description);
         children = new ArrayList<>();
     }
 
     public MenuBundle(MenuBundle mb){
-        this(mb.name, mb.description);
+        this(mb.code, mb.name, mb.description);
         children = new ArrayList<>(mb.children);
         this.price = mb.price;
     }
@@ -46,7 +46,6 @@ public class MenuBundle extends MenuComponent {
      *         decimal places).
      */
     public double getPrice() {
-        // TODO
         return price;
     }
 
@@ -56,7 +55,6 @@ public class MenuBundle extends MenuComponent {
      * @param price The price of the bundle in SGD.
      */
     public void setPrice(double price) {
-        // TODO
         this.price = price;
     }
 
@@ -70,7 +68,6 @@ public class MenuBundle extends MenuComponent {
      * @return The quantity of the bundle (ordered).
      */
     public int getQuantity() {
-        // TODO
         return quantity;
     }
 
@@ -80,7 +77,6 @@ public class MenuBundle extends MenuComponent {
      * @param quantity The quantity of the bundle.
      */
     public void setQuantity(int quantity) {
-        // TODO
         this.quantity = quantity;
     }
 
@@ -92,7 +88,6 @@ public class MenuBundle extends MenuComponent {
      * @throws IllegalArgumentException If the index is out of range.
      */
     public MenuComponent getChild(int index) {
-        // TODO
         if(index < 0 || index > children.size()){
             throw new IllegalArgumentException();
         }
@@ -105,7 +100,6 @@ public class MenuBundle extends MenuComponent {
      * @return The number of children in the bundle.
      */
     public int getChildrenCount() {
-        // TODO
         return children.size();
     }
 
@@ -115,7 +109,6 @@ public class MenuBundle extends MenuComponent {
      * @param child The component to be added as a child.
      */
     public void addChild(MenuComponent child) {
-        // TODO
         children.add(child);
     }
 
@@ -126,7 +119,6 @@ public class MenuBundle extends MenuComponent {
      * @throws IllegalArgumentException If the index is out of range.
      */
     public void removeChild(int index) {
-        // TODO
         if(index < 0 || index > children.size()){
             throw new IllegalArgumentException();
         }
@@ -138,7 +130,6 @@ public class MenuBundle extends MenuComponent {
      * way.
      */
     public void print() {
-        // TODO
         System.out.printf("%d\t%s\t%.2f\n", quantity, name, getTotalPrice());
         for(MenuComponent mc: children){
             System.out.printf("\t%s\n", mc.name);

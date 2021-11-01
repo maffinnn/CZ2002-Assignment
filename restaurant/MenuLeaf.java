@@ -17,16 +17,16 @@ public class MenuLeaf extends MenuComponent {
      */
     private int quantity;
 
-    public MenuLeaf(String name, String description){
-        super(name, description);
+    public MenuLeaf(int code, String name, String description){
+        super(code, name, description);
     }
-    public MenuLeaf(String name, String description, double price){
-        super(name, description);
+    public MenuLeaf(int code, String name, String description, double price){
+        super(code, name, description);
         this.price = price;
     }
 
     public MenuLeaf(MenuLeaf mf){
-        this(mf.name, mf.description, mf.price);
+        this(mf.code, mf.name, mf.description, mf.price);
     }
 
     /**
@@ -36,7 +36,6 @@ public class MenuLeaf extends MenuComponent {
      *         places).
      */
     public double getPrice() {
-        // TODO
         return price;
     }
 
@@ -47,7 +46,6 @@ public class MenuLeaf extends MenuComponent {
      *         places).
      */
     public double getTotalPrice() {
-        // TODO
         return price * quantity;
     }
 
@@ -57,7 +55,6 @@ public class MenuLeaf extends MenuComponent {
      * @param price The price of the item in SGD.
      */
     public void setPrice(double price) {
-        // TODO
         this.price = price;
     }
 
@@ -67,7 +64,6 @@ public class MenuLeaf extends MenuComponent {
      * @return The quantity of the item (ordered).
      */
     public int getQuantity() {
-        // TODO
         return quantity;
     }
 

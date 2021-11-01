@@ -1,8 +1,0 @@
-3
-Gary Smith
-1,manager,male
-Croop Green
-233,chef,male
-Li Lee
-332,server,female
-

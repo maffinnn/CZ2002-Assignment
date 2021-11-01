@@ -40,8 +40,7 @@ public class TableManager {
      * @throws IllegalArgumentException If id is out of range.
      */
     public int getTableCapacity(int id) {
-        // TODO
-        if (id < 0 || id > tables.size()) {
+        if (id < 0 || id >= tables.size()) {
             throw new IllegalArgumentException();
         } else
             return tables.get(id);
@@ -205,6 +204,7 @@ public class TableManager {
                 Reservation r = new Reservation(time, tableId, pax, contact);
                 addReservation(r);
             }
+            br.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -223,7 +223,6 @@ public class TableManager {
             for (Reservation r : reservations) {
                 wr.write(r.time.toString() + "," + r.tableId + "," + r.pax + "," + r.contact + "\n");
             }
-
             wr.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -241,6 +240,7 @@ public class TableManager {
                 int capacity = Integer.parseInt(br.readLine());
                 tables.add(capacity);
             }
+            br.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

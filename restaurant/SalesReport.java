@@ -58,11 +58,11 @@ public class SalesReport {
     }
 
     public void print() {
-        System.out.println("Item\t\t\tQty");
+        System.out.printf("Item%26s\n", "Qty");
         for (MenuComponent item : itemSoldTable.keySet()) {
-            System.out.printf("%s\t\t%d\n", item.name, itemSoldTable.get(item));
+            System.out.printf("%-24s\t%d\n", item.name, itemSoldTable.get(item));
         }
-        System.out.printf("\t\tTOTAL REVENUE:\t%.2f\n", totalRevenue);
+        System.out.printf("%24s\t%.2f\n", "TOTAL REVENUE:", totalRevenue);
     }
 
 }

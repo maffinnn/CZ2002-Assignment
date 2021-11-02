@@ -25,7 +25,7 @@ public class RestaurantApp {
     private boolean editItem(MenuComponent category) {
         System.out.print("0.\tGo back\n" + "1.\tAdd item\n" + "2.\tUpdate item\n" + "3.\tRemove item\n"
                 + "4.\tRemove this category\n" + "Choose option:");
-        int op = sc.nextInt();
+        int op = Integer.parseInt(sc.nextLine());
         switch (op) {
         case 1: {
             // add item
@@ -58,8 +58,9 @@ public class RestaurantApp {
                     ComboCode = rand.nextInt(10000);
                 } while (ComboCode < 0 || myRestaurant.menuReference.containsKey(ComboCode));
                 MenuBundle Combo = new MenuBundle(ComboCode, name, "");
-
+                displayMenu();
                 for (int i = 0; i < numOfItems; i++) {
+
                     System.out.print("Combo item code: ");
                     int itemCode = Integer.parseInt(sc.nextLine());
                     while (!myRestaurant.menuReference.containsKey(itemCode)) {
@@ -79,8 +80,135 @@ public class RestaurantApp {
         }
             break;
         case 2: { // update item
-            displayItems(category);
+            if (category.name.compareTo("Combo") != 0 && category.name.compareTo("Promotions") != 0) {
+                displayItems(category);
+            } else {
+                displayCombos(category);
+            }
+            System.out.println("Enter item code: ");
+            int itemCode = Integer.parseInt(sc.nextLine());
+            while (!myRestaurant.menuReference.containsKey(itemCode)) {
+                System.out.println("Invalid item code, please try again");
+                System.out.print("Enter item code: ");
+                itemCode = Integer.parseInt(sc.nextLine());
+            }
 
+            MenuComponent curItem = myRestaurant.menuReference.get(itemCode);
+
+            if (curItem instanceof MenuLeaf) {
+
+                System.out.print("0.\tGo back\n" + "1.\tupdate name\n" + "2.\tupdate description\n"
+                        + "3.\tupdate price\n" + "Choose option: ");
+                int curOp = Integer.parseInt(sc.nextLine());
+                switch (curOp) {
+                case 1: {
+                    System.out.print("Enter new name: ");
+                    curItem.name = sc.nextLine();
+                    break;
+                }
+                case 2: {
+                    System.out.print("Enter new description: ");
+                    curItem.description = sc.nextLine();
+                    break;
+                }
+                case 3: {
+                    System.out.print("Enter new price: ");
+                    double newPrice = Double.parseDouble(sc.nextLine());
+                    while (newPrice <= 0) {
+                        System.out.println("Invalid price, please enter again.");
+                        System.out.print("Enter new price: ");
+                        newPrice = Double.parseDouble(sc.nextLine());
+                    }
+                    curItem.setPrice(newPrice);
+                    break;
+                }
+                default:
+                    break;
+                }
+
+            } else {
+                System.out.print("0.\tGo back\n" + "1.\tupdate name\n" + "2.\tupdate description\n"
+                        + "3.\tupdate price\n" + "4.\tadd item\n" + "5.\tremove item\n" + "Choose option: ");
+                int curOp = Integer.parseInt(sc.nextLine());
+                while (curOp >= 1 && curOp <= 5) {
+                    switch (curOp) {
+                    case 1: {
+                        System.out.print("Enter new name: ");
+                        curItem.name = sc.nextLine();
+                        break;
+                    }
+                    case 2: {
+                        System.out.print("Enter new description: ");
+                        curItem.description = sc.nextLine();
+                        break;
+                    }
+                    case 3: {
+                        System.out.print("Enter new price: ");
+                        double newPrice = Double.parseDouble(sc.nextLine());
+                        while (newPrice <= 0) {
+                            System.out.println("Invalid price, please enter again.");
+                            System.out.print("Enter new price: ");
+                            newPrice = Double.parseDouble(sc.nextLine());
+                        }
+                        curItem.setPrice(newPrice);
+                        break;
+                    }
+                    case 4: {
+                        displayMenu();
+                        System.out.print("Enter item code: ");
+                        itemCode = Integer.parseInt(sc.nextLine());
+                        while (!myRestaurant.menuReference.containsKey(itemCode)) {
+                            System.out.println("Invalid item code, please try again");
+                            System.out.print("Enter item code: ");
+                            itemCode = Integer.parseInt(sc.nextLine());
+                        }
+                        curItem.addChild(myRestaurant.menuReference.get(itemCode));
+                        break;
+                    }
+                    case 5: {
+                        MenuBundle combo = (MenuBundle) curItem;
+                        combo.print(false);
+                        System.out.println("Enter item code: ");
+                        itemCode = Integer.parseInt(sc.nextLine());
+                        int index = combo.contains(itemCode);
+                        if (index == -1) {
+                            System.out.println("Unsuccessful removal.");
+                            break;
+                        }
+                        combo.removeChild(index);
+                        break;
+                    }
+                    default:
+                        break;
+                    }
+                    System.out.print("0.\tGo back\n" + "1.\tupdate name\n" + "2.\tupdate description\n"
+                            + "3.\tupdate price\n" + "4.\tadd item\n" + "5.\tremove item\n" + "Choose option: ");
+                    curOp = Integer.parseInt(sc.nextLine());
+                }
+
+            }
+            break;
+
+        }
+        case 3: {
+            if (category.name.compareTo("Combo") != 0 && category.name.compareTo("Promotions") != 0) {
+                displayItems(category);
+            } else {
+                displayCombos(category);
+            }
+            System.out.println("Enter item code: ");
+            int itemCode = Integer.parseInt(sc.nextLine());
+            while (!myRestaurant.menuReference.containsKey(itemCode)) {
+                System.out.println("Invalid item code, please try again");
+                System.out.print("Enter item code: ");
+                itemCode = Integer.parseInt(sc.nextLine());
+            }
+            int itemIndex = ((Menu) category).contains(itemCode);
+            if (itemIndex == -1) {
+                break;
+            }
+            category.removeChild(itemIndex);
+            break;
         }
         default:
             return false;
@@ -95,7 +223,8 @@ public class RestaurantApp {
             displayCategory();
             System.out.printf("\t%d.Create a New Category\n", myRestaurant.menu.getChildrenCount() + 1);
             System.out.print("Choose Category:");
-            int op = sc.nextInt();
+            int op = Integer.parseInt(sc.nextLine());
+            // String dummy = sc.nextLine();
             MenuComponent category;
             if (op == 0)
                 return;
@@ -119,7 +248,7 @@ public class RestaurantApp {
 
     private void displayCategory() {
         Menu menu = myRestaurant.menu;
-        System.out.print("\t" + menu.name + "category");
+        // System.out.print("\t" + menu.name + "category");
         for (int i = 0; i < menu.getChildrenCount(); i++) {
             MenuComponent category = menu.getChild(i);
             System.out.printf("\t%d.%s\n", i + 1, category.name);
@@ -129,7 +258,7 @@ public class RestaurantApp {
     private void displayItems(MenuComponent category) {
         for (int j = 0; j < category.getChildrenCount(); j++) {
             MenuComponent item = category.getChild(j);
-            System.out.printf("\t%d.%s\t%.2f\n", item.code, item.name, item.getPrice());
+            System.out.printf("%04d\t%s\t%.2f\n", item.code, item.name, item.getPrice());
             System.out.printf("\t%s\n", item.description);
         }
     }
@@ -137,7 +266,7 @@ public class RestaurantApp {
     private void displayCombos(MenuComponent combo) {
         for (int j = 0; j < combo.getChildrenCount(); j++) {
             MenuComponent mb = combo.getChild(j);
-            System.out.printf("%d\t%s\t%.2f\n", mb.code, mb.name, mb.getPrice());
+            System.out.printf("%04d\t%s\t%.2f\n", mb.code, mb.name, mb.getPrice());
             for (int k = 0; k < mb.getChildrenCount(); k++) {
                 MenuComponent item = mb.getChild(k);
                 System.out.printf("\t\t%s\n", item.name);
@@ -181,38 +310,50 @@ public class RestaurantApp {
         do {
             System.out.println("----------------------------------------");
             System.out.print("\t0.Go back\n" + "\t1.Add item\n" + "\t2.Remove item\n");
-            op = sc.nextInt();
+            op = Integer.parseInt(sc.nextLine());
             switch (op) {
             case 1:
+                displayMenu();
                 System.out.print("Enter item code: ");
-                int itemCode = sc.nextInt();
+                int itemCode = Integer.parseInt(sc.nextLine());
                 while (!myRestaurant.menuReference.containsKey(itemCode)) {
                     System.out.println("Invalid item code, please enter again");
                     System.out.print("Enter item code: ");
-                    itemCode = sc.nextInt();
+                    itemCode = Integer.parseInt(sc.nextLine());
                 }
                 System.out.print("Enter quantity: ");
-                int quantity = sc.nextInt();
+                int quantity = Integer.parseInt(sc.nextLine());
                 o.addItem(myRestaurant.menuReference.get(itemCode), quantity);
                 System.out.printf("%d serving(s) of %s has been added\n", quantity,
                         myRestaurant.menuReference.get(itemCode).name);
                 break;
             case 2:
+                o.print();
+                if (o.orderedItems.getChildrenCount() == 0) {
+                    System.out.println("No item in this order.");
+                    break;
+                }
                 System.out.print("Enter item code: ");
-                int code = sc.nextInt();
-                while (!myRestaurant.menuReference.containsKey(code)) {
+                int code = Integer.parseInt(sc.nextLine());
+                while (!myRestaurant.menuReference.containsKey(code) || o.getItemIndex(code) == -1) {
                     System.out.println("Invalid item code, please enter again");
                     System.out.print("Enter item code: ");
-                    itemCode = sc.nextInt();
-
+                    code = Integer.parseInt(sc.nextLine());
                 }
                 int itemIndex = o.getItemIndex(code);
-                while (itemIndex == -1) {
-                    System.out.println("Invalid item code, please enter again");
-                    System.out.print("Enter item code: ");
-                    itemCode = sc.nextInt();
+                MenuComponent itemInOrder = o.orderedItems.getChild(itemIndex);
+                System.out.print("Enter item quantity: ");
+                quantity = Integer.parseInt(sc.nextLine());
+                while (quantity > itemInOrder.getQuantity() || quantity < 0) {
+                    System.out.println("Invalid quantity, please enter again");
+                    System.out.print("Enter item quantity: ");
+                    quantity = Integer.parseInt(sc.nextLine());
                 }
-                o.orderedItems.removeChild(itemIndex);
+                if (quantity == itemInOrder.getQuantity()) {
+                    o.orderedItems.removeChild(itemIndex);
+                    break;
+                }
+                itemInOrder.setQuantity(itemInOrder.getQuantity() - quantity);
                 break;
             default:
                 break;
@@ -232,7 +373,7 @@ public class RestaurantApp {
             System.out.print("(1) Menu\n" + "(2) Order\n" + "(3) Reservation\n" + "(4) Check Table Availability\n"
                     + "(5) Print Sales Revenue Report\n" + "(6) Shut down the program\n");
             System.out.println("Choose an option:");
-            op = sc.nextInt();
+            op = Integer.parseInt(sc.nextLine());
 
             switch (op) {
             case 1:
@@ -244,31 +385,39 @@ public class RestaurantApp {
             case 3:
                 runReservation();
                 break;
-            case 4:
+            case 4: {
+                myRestaurant.updateTime();
                 myRestaurant.tableManager.printAllTables();
                 break;
+            }
             case 5:
                 System.out.println("----------------------------------------");
                 System.out.print("Enter the start date(format:dd/mm/yyyy): ");
-                String l = sc.next();
-                LocalDate from = LocalDate.parse(l, dt_formatter);
+                String l = sc.nextLine();
+                LocalDate from = LocalDate.parse(l, dt_formatter).minusDays(1);
+
+                System.out.println(from);
+
                 System.out.print("Enter the end date(format:dd/mm/yyyy): ");
-                l = sc.next();
-                LocalDate to = LocalDate.parse(l, dt_formatter);
+                l = sc.nextLine();
+                LocalDate to = LocalDate.parse(l, dt_formatter).plusDays(1);
+
+                System.out.println(to);
+
                 while (to.isBefore(from)) {
                     System.out.println("Invalid query of period, please enter again");
                     System.out.print("Enter the start date(format:dd/mm/yyyy): ");
-                    l = sc.next();
+                    l = sc.nextLine();
                     from = LocalDate.parse(l, dt_formatter);
                     System.out.print("Enter the end date(format:dd/mm/yyyy): ");
-                    l = sc.next();
+                    l = sc.nextLine();
                     to = LocalDate.parse(l, dt_formatter);
                 }
                 printReport(from, to);
                 break;
             case 6:
                 System.out.println("Shut down the program? (Y/N)");
-                String cm = sc.next();
+                String cm = sc.nextLine();
                 // == tests object references, .equals() tests the string values
                 if (cm.equals("Y") || cm.equals("y")) {
                     myRestaurant.saveAll();
@@ -314,31 +463,31 @@ public class RestaurantApp {
             System.out.print("\t0.Go back\n" + "\t1.Make Reservation\n" + "\t2.Check Reservation\n"
                     + "\t3.Remove Reservation\n");
             System.out.print("Choose an option:");
-            op = sc.nextInt();
+            op = Integer.parseInt(sc.nextLine());
             switch (op) {
             case 1:
                 System.out.print("Enter the date(format: dd/mm/yyyy): ");
-                LocalDate date = LocalDate.parse(sc.next(), dt_formatter);
+                LocalDate date = LocalDate.parse(sc.nextLine(), dt_formatter);
                 while (date.isBefore(LocalDate.now())) {
                     System.out.println("invalid date, please try again");
                     System.out.print("Enter the date(format: dd/mm/yyyy): ");
-                    date = LocalDate.parse(sc.next(), dt_formatter);
+                    date = LocalDate.parse(sc.nextLine(), dt_formatter);
                 }
                 System.out.print("Enter the timing(format: 13:00): ");
-                LocalTime time = LocalTime.parse(sc.next());
+                LocalTime time = LocalTime.parse(sc.nextLine());
                 LocalDateTime dateTime = LocalDateTime.of(date, time);
-
+                displayTables();
                 System.out.print("Enter tableId: ");
-                int tableId = sc.nextInt();
+                int tableId = Integer.parseInt(sc.nextLine());
                 System.out.print("Enter pax: ");
-                int pax = sc.nextInt();
+                int pax = Integer.parseInt(sc.nextLine());
                 System.out.print("Enter contact number: ");
-                long contact = sc.nextLong();
+                long contact = Long.parseLong(sc.nextLine());
                 makeReservation(dateTime, tableId, pax, contact);
                 break;
             case 2:
                 System.out.println("Enter contact number: ");
-                long c = sc.nextLong();
+                long c = Long.parseLong(sc.nextLine());
                 ArrayList<Reservation> temp = myRestaurant.tableManager.getReservation(c);
                 if (temp.size() == 0) {
                     System.out.println("This reservation does not exist");
@@ -350,11 +499,24 @@ public class RestaurantApp {
                 break;
             case 3:
                 System.out.println("Enter contact number: ");
-                long cc = sc.nextLong();
+                long cc = Long.parseLong(sc.nextLine());
                 ArrayList<Reservation> t = myRestaurant.tableManager.getReservation(cc);
+
                 if (t.size() != 0) {
-                    for (Reservation r : t)
-                        myRestaurant.tableManager.removeReservation(r);
+                    int index = 0;
+                    for (Reservation r : t) {
+                        System.out.printf("%d\t", index + 1);
+                        r.print();
+                        index++;
+                    }
+                    System.out.println("Choose an index: ");
+                    index = Integer.parseInt(sc.nextLine()) - 1;
+                    while (index < 0 || index >= t.size()) {
+                        System.out.println("Invalid index.");
+                        System.out.println("Choose an index: ");
+                        index = Integer.parseInt(sc.nextLine()) - 1;
+                    }
+                    myRestaurant.tableManager.removeReservation(t.get(index));
                 }
 
                 break;
@@ -370,7 +532,7 @@ public class RestaurantApp {
             System.out.println("----------------------------------------");
             System.out.print("\t0.Go back\n" + "\t1.View Menu\n" + "\t2.Edit Menu\n");
             System.out.print("Choose an option:");
-            op = sc.nextInt();
+            op = Integer.parseInt(sc.nextLine());
             switch (op) {
             case 1:
                 displayMenu();
@@ -391,54 +553,54 @@ public class RestaurantApp {
             System.out.print("\t0.Go back\n" + "\t1.Make Order\n" + "\t2.View Order\n" + "\t3.Edit Order\n"
                     + "\t4.Print Invoice\n");
             System.out.print("Choose an option:");
-            op = sc.nextInt();
+            op = Integer.parseInt(sc.nextLine());
             switch (op) {
             case 1:
                 System.out.print("Enter your staffId: ");
-                int staffId = sc.nextInt();
+                int staffId = Integer.parseInt(sc.nextLine());
                 System.out.print("Enter the tableId: ");
-                int tableId = sc.nextInt();
+                int tableId = Integer.parseInt(sc.nextLine());
                 System.out.print("Enter pax: ");
-                int pax = sc.nextInt();
+                int pax = Integer.parseInt(sc.nextLine());
                 makeOrder(staffId, tableId, pax);
                 System.out.print("Order is created!\n");
                 break;
             case 2:
+                displayTables();
                 System.out.print("Enter tableId: ");
-                int Id = sc.nextInt();
+                int Id = Integer.parseInt(sc.nextLine());
                 Order o = myRestaurant.getOrderbytableId(Id);
-                while (o == null) {
-                    System.out.print("Invalid tableId, please try again\n");
-                    System.out.print("Enter tableId: ");
-                    Id = sc.nextInt();
-                    o = myRestaurant.getOrderbytableId(Id);
+                if (o == null) {
+                    System.out.print("No active order on this table.\n");
+                    break;
                 }
                 o.print();
                 break;
             case 3:
+                displayTables();
                 System.out.print("Enter tableId: ");
-                int t = sc.nextInt();
+                int t = Integer.parseInt(sc.nextLine());
                 Order oo = myRestaurant.getOrderbytableId(t);
-                while (oo == null) {
-                    System.out.print("Invalid tableId, please try again\n");
-                    System.out.print("Enter tableId: ");
-                    t = sc.nextInt();
-                    oo = myRestaurant.getOrderbytableId(t);
+                if (oo == null) {
+                    System.out.print("No active order on this table.\n");
+                    break;
                 }
+                oo.print();
                 editOrder(oo);
                 break;
             case 4:
+                displayTables();
                 System.out.print("Enter tableId: ");
-                int tt = sc.nextInt();
+                int tt = Integer.parseInt(sc.nextLine());
                 Order ooo = myRestaurant.getOrderbytableId(tt);
                 while (ooo == null) {
                     System.out.print("Invalid tableId, please try again\n");
                     System.out.print("Enter tableId: ");
-                    tt = sc.nextInt();
+                    tt = Integer.parseInt(sc.nextLine());
                     ooo = myRestaurant.getOrderbytableId(tt);
                 }
                 System.out.println("Are you a memeber of Restaurant 0.0? (Y/N): ");
-                String ans = sc.next();
+                String ans = sc.nextLine();
                 if (ans.equals("Y") || ans.equals("y"))
                     ooo.printInvoice(true);
                 else

@@ -172,9 +172,9 @@ public class TableManager {
      */
     public void printAllTables() {
         boolean[] occupied = getAvailableTables(LocalDateTime.now());
-        System.out.print("Index\t\tCapacity\tAvailability\n");
+        System.out.printf("%s%16s%20s\n", "Index", "Capacity", "Availability");
         for (int i = 0; i < tables.size(); i++) {
-            System.out.printf("%d\t\t%d\t\t\t%d\n", i, tables.get(i), occupied[i] ? 0 : 1);
+            System.out.printf("%d%16d%20s\n", i, tables.get(i), occupied[i] ? "No" : "Yes");
         }
     }
 

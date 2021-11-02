@@ -11,7 +11,7 @@ import java.util.Arrays;
  * @author TODO
  * @version 0.0
  */
-public class Order {
+public class Order implements Comparable<Order> {
     /**
      * A menu contains the ordered items and quantity.
      */
@@ -74,7 +74,20 @@ public class Order {
         active = true;
     }
 
+    public Order(Reservation reservation, double totalPrice){
+        this.reservation = reservation;
+        orderedItems = new Menu(-1, reservation.time.toString(), "");
+        this.totalPrice = totalPrice;
+        active = false;
+    }
+
     public void addItem(MenuComponent item, int quantity) {
+
+        MenuComponent itemInOrder = orderedItems.contains(item);
+        if( itemInOrder != null) {
+            itemInOrder.setQuantity(itemInOrder.getQuantity() + quantity);
+            return;
+        }
 
         if (item instanceof MenuBundle) {
             MenuBundle mb = new MenuBundle((MenuBundle) item);
@@ -120,7 +133,7 @@ public class Order {
         for (int i = 0; i < orderedItems.getChildrenCount(); i++) {
             MenuComponent mc = orderedItems.getChild(i);
             int quantity = mc.getQuantity();
-            System.out.printf("%d\t%s\t%.2f\n", quantity, mc.name, mc.getPrice() * quantity);
+            System.out.printf("%d\t%04d-%s\t%.2f\n", quantity, mc.code,mc.name, mc.getPrice() * quantity);
             totalPrice += mc.getTotalPrice();
         }
         System.out.println("--------------------------------------");
@@ -137,24 +150,45 @@ public class Order {
         if (!active)
             return;
         active = false;
-        print();
+        System.out.println("\n==========================================");
+        System.out.println("Restaurant 0.0");
+        System.out.printf("Server:%s\t\tTable:%d\n", staff.getId(), reservation.tableId);
+        String t = String.join(" ", reservation.time.toString().split("T"));
+        System.out.printf("Time:%s\n", t);
+        System.out.println("--------------------------------------");
+        totalPrice = 0;
+        for (int i = 0; i < orderedItems.getChildrenCount(); i++) {
+            MenuComponent mc = orderedItems.getChild(i);
+            int quantity = mc.getQuantity();
+            System.out.printf("%d\t%s\t%.2f\n", quantity, mc.name, mc.getPrice() * quantity);
+            totalPrice += mc.getTotalPrice();
+        }
+        System.out.println("--------------------------------------");
+
+        System.out.printf("%24s\t%.2f\n","Sub-Total:", totalPrice);
+
 
         if (isMember) {
             double discount = totalPrice * discountRate;
             totalPrice -= discount;
-            System.out.printf("\tMembership discount:\t%.2f\n", discount);
+            System.out.printf("%24s\t%.2f\n", "Membership discount:", discount);
         }
 
         double serviceCharge = totalPrice * 0.1;
         double tax = totalPrice * 1.1 * taxRate;
 
-        System.out.printf("\t\tService Charge:\t%.2f\n", serviceCharge);
-        System.out.printf("\t\tTax:\t%.2f\n", tax);
 
-        System.out.printf("\t\tTOTAL:\t%.2f\n", totalPrice + serviceCharge + tax);
-
+        System.out.printf("%24s\t%.2f\n", "Service Charge:",serviceCharge);
+        System.out.printf("%24s\t%.2f\n", "Tax:", tax);
+        System.out.println("--------------------------------------");
+        System.out.printf("%24s\t%.2f\n", "TOTAL:", totalPrice + serviceCharge + tax);
+        System.out.println("==========================================\n");
         reservation.time = LocalDateTime.now();
 
+    }
+
+    public void updateTime(){
+        reservation.time = LocalDateTime.now();
     }
 
     public double getTotalPrice() {
@@ -163,5 +197,9 @@ public class Order {
 
     public int getStaffId() {
         return staff.getId();
+    }
+
+    public int compareTo(Order o2){
+        return this.reservation.compareTo(o2.reservation);
     }
 }

@@ -71,6 +71,22 @@ public class Menu extends MenuComponent {
         children.remove(index);
     }
 
+    public MenuComponent contains(MenuComponent mc) {
+        for (int i = 0; i < children.size(); i++) {
+            if (children.get(i).code == mc.code)
+                return children.get(i);
+        }
+        return null;
+    }
+
+    public int contains(int itemCode) {
+        for (int i = 0; i < children.size(); i++) {
+            if (children.get(i).code == itemCode)
+                return i;
+        }
+        return -1;
+    }
+
     /**
      * Prints the content of the menu to standard output in a user-friendly way.
      */

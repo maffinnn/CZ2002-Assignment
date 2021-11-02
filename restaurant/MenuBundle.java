@@ -136,6 +136,25 @@ public class MenuBundle extends MenuComponent {
         }
     }
 
+    public void print(boolean isInvoice) {
+        if (isInvoice) {
+            print();
+            return;
+        }
+        for (MenuComponent mc : children) {
+            System.out.printf("%04d\t%s\n", mc.code, mc.name);
+        }
+
+    }
+
+    public int contains(int itemCode) {
+        for (int i = 0; i < children.size(); i++) {
+            if (children.get(i).code == itemCode)
+                return i;
+        }
+        return -1;
+    }
+
     public boolean equals(Object o) {
         if (this == o)
             return true;

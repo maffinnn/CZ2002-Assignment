@@ -77,7 +77,7 @@ public class Restaurant {
      */
     public SalesReport generateSalesReport(LocalDate from, LocalDate to) {
         SalesReport report = new SalesReport(from, to);
-        if (historyOrders == null)
+        if (historyOrders.size() == 0)
             loadhistoryOrders();
 
         Iterator it = historyOrders.iterator();
@@ -96,6 +96,7 @@ public class Restaurant {
             String fileName = "restaurant\\MenuReference.txt";
             BufferedReader br = new BufferedReader(new FileReader(fileName));
             String l;
+            ArrayList<String[]> bundleLists = new ArrayList<>();
             while ((l = br.readLine()) != null) {
                 String[] temp = l.split(":");
                 int itemCode = Integer.parseInt(temp[0]);
@@ -109,20 +110,25 @@ public class Restaurant {
                     ml.setPrice(price);
                     menuReference.put(itemCode, ml);
                 } else {
-                    // bundle item
-                    /* assumed always the component of the bundle item has alreay been parsed */
-                    String itemName = temp[2];
-                    double price = Double.parseDouble(temp[3]);
-                    MenuBundle mb = new MenuBundle(itemCode, itemName, "");
-                    mb.setPrice(price);
-                    String[] bundleItems = temp[4].split(",");
-                    int numOfItems = bundleItems.length;
-                    for (int i = 0; i < numOfItems; i++) {
-                        int childCode = Integer.parseInt(bundleItems[i]);
-                        mb.addChild(menuReference.get(childCode));
-                    }
-                    menuReference.put(itemCode, mb);
+                    bundleLists.add(temp);
                 }
+            }
+
+            for (String[] temp : bundleLists) {
+                int itemCode = Integer.parseInt(temp[0]);
+                // bundle item
+                /* assumed always the component of the bundle item has alreay been parsed */
+                String itemName = temp[2];
+                double price = Double.parseDouble(temp[3]);
+                MenuBundle mb = new MenuBundle(itemCode, itemName, "");
+                mb.setPrice(price);
+                String[] bundleItems = temp[4].split(",");
+                int numOfItems = bundleItems.length;
+                for (int i = 0; i < numOfItems; i++) {
+                    int childCode = Integer.parseInt(bundleItems[i]);
+                    mb.addChild(menuReference.get(childCode));
+                }
+                menuReference.put(itemCode, mb);
             }
             br.close();
         } catch (FileNotFoundException e) {
@@ -215,6 +221,7 @@ public class Restaurant {
                 int pax = Integer.parseInt(list[2]);
                 long contact = Long.parseLong(list[3]);
                 Reservation r = new Reservation(time, tableId, pax, contact);
+                tableManager.addReservation(r);
 
                 int staffId = Integer.parseInt(br.readLine());
                 Staff s = staff.get(staffId);
@@ -329,7 +336,7 @@ public class Restaurant {
     }
 
     public void loadhistoryOrders() {
-        String pathName = "restaurant\\historyOrders\\";
+        String pathName = "restaurant\\historyOrders/";
 
         File file = new File(pathName);
         File[] fileList = file.listFiles();
@@ -347,7 +354,7 @@ public class Restaurant {
                 double totalPrice = Double.parseDouble(br.readLine());
                 int numOfItems = Integer.parseInt(br.readLine());
                 Reservation r = new Reservation(time, tableId, pax, contact);
-                Order o = new Order(r, staff.get(staffId));
+                Order o = new Order(r, totalPrice);
                 for (int j = 0; j < numOfItems; j++) {
                     String[] t = br.readLine().split(",");
                     int quantity = Integer.parseInt(t[0]);
@@ -362,6 +369,12 @@ public class Restaurant {
 
         }
 
+    }
+
+    public void updateTime() {
+        for (Order o : activeOrders) {
+            o.updateTime();
+        }
     }
 
 }

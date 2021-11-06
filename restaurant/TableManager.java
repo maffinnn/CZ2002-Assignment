@@ -178,6 +178,14 @@ public class TableManager {
         }
     }
 
+    public void printAllTables(LocalDateTime time) {
+        boolean[] occupied = getAvailableTables(time);
+        System.out.printf("%s%16s%20s\n", "Index", "Capacity", "Availability");
+        for (int i = 0; i < tables.size(); i++) {
+            System.out.printf("%d%16d%20s\n", i, tables.get(i), occupied[i] ? "No" : "Yes");
+        }
+    }
+
     /**
      * Prints active reservations to standard output in a user-friendly way.
      */
@@ -202,6 +210,7 @@ public class TableManager {
                 int pax = Integer.parseInt(list[2]);
                 long contact = Long.parseLong(list[3]);
                 Reservation r = new Reservation(time, tableId, pax, contact);
+
                 addReservation(r);
             }
             br.close();

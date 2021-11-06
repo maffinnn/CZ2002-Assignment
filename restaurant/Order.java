@@ -74,7 +74,7 @@ public class Order implements Comparable<Order> {
         active = true;
     }
 
-    public Order(Reservation reservation, double totalPrice){
+    public Order(Reservation reservation, double totalPrice) {
         this.reservation = reservation;
         orderedItems = new Menu(-1, reservation.time.toString(), "");
         this.totalPrice = totalPrice;
@@ -84,7 +84,7 @@ public class Order implements Comparable<Order> {
     public void addItem(MenuComponent item, int quantity) {
 
         MenuComponent itemInOrder = orderedItems.contains(item);
-        if( itemInOrder != null) {
+        if (itemInOrder != null) {
             itemInOrder.setQuantity(itemInOrder.getQuantity() + quantity);
             return;
         }
@@ -133,7 +133,7 @@ public class Order implements Comparable<Order> {
         for (int i = 0; i < orderedItems.getChildrenCount(); i++) {
             MenuComponent mc = orderedItems.getChild(i);
             int quantity = mc.getQuantity();
-            System.out.printf("%d\t%04d-%s\t%.2f\n", quantity, mc.code,mc.name, mc.getPrice() * quantity);
+            System.out.printf("%d\t%04d-%s\t%.2f\n", quantity, mc.code, mc.name, mc.getPrice() * quantity);
             totalPrice += mc.getTotalPrice();
         }
         System.out.println("--------------------------------------");
@@ -165,8 +165,7 @@ public class Order implements Comparable<Order> {
         }
         System.out.println("--------------------------------------");
 
-        System.out.printf("%24s\t%.2f\n","Sub-Total:", totalPrice);
-
+        System.out.printf("%24s\t%.2f\n", "Sub-Total:", totalPrice);
 
         if (isMember) {
             double discount = totalPrice * discountRate;
@@ -177,8 +176,7 @@ public class Order implements Comparable<Order> {
         double serviceCharge = totalPrice * 0.1;
         double tax = totalPrice * 1.1 * taxRate;
 
-
-        System.out.printf("%24s\t%.2f\n", "Service Charge:",serviceCharge);
+        System.out.printf("%24s\t%.2f\n", "Service Charge:", serviceCharge);
         System.out.printf("%24s\t%.2f\n", "Tax:", tax);
         System.out.println("--------------------------------------");
         System.out.printf("%24s\t%.2f\n", "TOTAL:", totalPrice + serviceCharge + tax);
@@ -187,7 +185,7 @@ public class Order implements Comparable<Order> {
 
     }
 
-    public void updateTime(){
+    public void updateTime() {
         reservation.time = LocalDateTime.now();
     }
 
@@ -199,7 +197,7 @@ public class Order implements Comparable<Order> {
         return staff.getId();
     }
 
-    public int compareTo(Order o2){
+    public int compareTo(Order o2) {
         return this.reservation.compareTo(o2.reservation);
     }
 }

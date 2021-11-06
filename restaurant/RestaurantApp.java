@@ -296,6 +296,10 @@ public class RestaurantApp {
         myRestaurant.tableManager.printAllTables();
     }
 
+    private void displayTables(LocalDateTime time) {
+        myRestaurant.tableManager.printAllTables(time);
+    }
+
     private void displayOrders() {
         System.out.println("activeOrders");
         int numOfOrders = myRestaurant.activeOrders.size();
@@ -476,7 +480,7 @@ public class RestaurantApp {
                 System.out.print("Enter the timing(format: 13:00): ");
                 LocalTime time = LocalTime.parse(sc.nextLine());
                 LocalDateTime dateTime = LocalDateTime.of(date, time);
-                displayTables();
+                displayTables(dateTime);
                 System.out.print("Enter tableId: ");
                 int tableId = Integer.parseInt(sc.nextLine());
                 System.out.print("Enter pax: ");

@@ -156,7 +156,7 @@ public class MenuBundle extends MenuComponent {
     }
 
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) // reference
             return true;
         if (o instanceof MenuBundle mb) {
             return this.name.compareTo(mb.name) == 0 && this.price == mb.price;

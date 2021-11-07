@@ -1,7 +1,6 @@
 package restaurant;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -35,17 +34,22 @@ public class SalesReport {
     private SalesReport() {
     }
 
+    /**
+     * @param start The starting date of the sales report.
+     * @param end   The end date of the sales report.
+     */
     public SalesReport(LocalDate start, LocalDate end) {
         from = start;
         to = end;
         totalRevenue = 0;
         itemSoldTable = new HashMap<MenuComponent, Integer>();
     }
-    // I'm too sleepy to write the interface now. Forgive me.
-    // Basic idea: processOrder(order) function that automatically process an order
-    // (add to total revenue, update sold quantity of individual item).
-    // And a print() function.
 
+    /**
+     * Add an order the the revenue report.
+     *
+     * @param thsiOrder The order to add.
+     */
     public void processOrder(Order thisOrder) {
         for (int i = 0; i < thisOrder.orderedItems.getChildrenCount(); i++) {
             MenuComponent item = thisOrder.orderedItems.getChild(i);
@@ -64,5 +68,4 @@ public class SalesReport {
         }
         System.out.printf("%24s\t%.2f\n", "TOTAL REVENUE:", totalRevenue);
     }
-
 }

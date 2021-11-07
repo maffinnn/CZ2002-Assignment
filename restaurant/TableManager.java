@@ -92,6 +92,12 @@ public class TableManager {
         return resultList;
     }
 
+    /**
+     * Returns list of reservations on a given table.
+     *
+     * @param tableId The inquired table.
+     * @return A list of reservations on the given table.
+     */
     public ArrayList<Reservation> getReservations(int tableId) {
         ArrayList<Reservation> resultList = new ArrayList<>();
         for (Reservation r : reservations) {
@@ -131,7 +137,6 @@ public class TableManager {
      *         still larger than pax) to large.
      */
     public ArrayList<Integer> getAvailableTables(LocalDateTime time, int pax) {
-        // TODO
         ArrayList<Integer> tableIndex = new ArrayList<>();
         boolean occupied[] = getAvailableTables(time);
         for (int i = 0; i < tables.size(); i++) {
@@ -142,6 +147,12 @@ public class TableManager {
         return tableIndex;
     }
 
+    /**
+     * Query available tables in given time.
+     *
+     * @param time The inquired time.
+     * @return Boolean array indicating available tables with true.
+     */
     public boolean[] getAvailableTables(LocalDateTime time) {
         update();
         boolean[] occupied = new boolean[tables.size()];
@@ -197,6 +208,9 @@ public class TableManager {
         }
     }
 
+    /**
+     * Load reservations from save file.
+     */
     public void loadReservations() {
         try {
             String fileName = "restaurant\\reservations.txt";
@@ -210,7 +224,6 @@ public class TableManager {
                 int pax = Integer.parseInt(list[2]);
                 long contact = Long.parseLong(list[3]);
                 Reservation r = new Reservation(time, tableId, pax, contact);
-
                 addReservation(r);
             }
             br.close();
@@ -222,13 +235,15 @@ public class TableManager {
         update();
     }
 
+    /**
+     * Save reservation information to file.
+     */
     public void saveReservations() {
         update();
         try {
             String fileName = "restaurant\\reservations.txt";
             BufferedWriter wr = new BufferedWriter(new FileWriter(fileName));
             wr.write(reservations.size() + "\n");
-
             for (Reservation r : reservations) {
                 wr.write(r.time.toString() + "," + r.tableId + "," + r.pax + "," + r.contact + "\n");
             }
@@ -240,6 +255,9 @@ public class TableManager {
         }
     }
 
+    /**
+     * Load table information from file.
+     */
     public void loadTables() {
         try {
             String fileName = "restaurant\\tables.txt";
@@ -257,12 +275,13 @@ public class TableManager {
         }
     }
 
+    /**
+     * Save table information to file.
+     */
     public void saveTables() {
-
         try {
             String fileName = "restaurant\\tables.txt";
             BufferedWriter bw = new BufferedWriter(new FileWriter(fileName));
-
             int numOfTables = tables.size();
             bw.write(numOfTables);
             bw.write("\n");
@@ -270,10 +289,8 @@ public class TableManager {
                 bw.write(tables.get(i) + "\n");
             }
             bw.close();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 }

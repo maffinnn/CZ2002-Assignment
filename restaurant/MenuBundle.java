@@ -26,14 +26,18 @@ public class MenuBundle extends MenuComponent {
     private ArrayList<MenuComponent> children;
 
     /**
-     * @param name        The name of the component.
-     * @param description The description of the component.
+     * @param code        The code of the bundle.
+     * @param name        The name of the bundle.
+     * @param description The description of the bundle.
      */
     public MenuBundle(int code, String name, String description) {
         super(code, name, description);
         children = new ArrayList<>();
     }
 
+    /**
+     * Clone constructor.
+     */
     public MenuBundle(MenuBundle mb) {
         this(mb.code, mb.name, mb.description);
         children = new ArrayList<>(mb.children);
@@ -59,6 +63,11 @@ public class MenuBundle extends MenuComponent {
         this.price = price;
     }
 
+    /**
+     * Returns the total price (quantity * price) of the bundle.
+     *
+     * @return The total price of the bundle in SGD.
+     */
     public double getTotalPrice() {
         return price * quantity;
     }
@@ -91,8 +100,8 @@ public class MenuBundle extends MenuComponent {
     public MenuComponent getChild(int index) {
         if (index < 0 || index >= children.size()) {
             throw new IllegalArgumentException();
-        } else
-            return children.get(index);
+        }
+        return children.get(index);
     }
 
     /**
@@ -122,8 +131,8 @@ public class MenuBundle extends MenuComponent {
     public void removeChild(int index) {
         if (index < 0 || index >= children.size()) {
             throw new IllegalArgumentException();
-        } else
-            children.remove(index);
+        }
+        children.remove(index);
     }
 
     /**
@@ -136,6 +145,11 @@ public class MenuBundle extends MenuComponent {
         }
     }
 
+    /**
+     * Prints the content of the bundle in different context (invoice/menu).
+     *
+     * @param isInvoice Whether the printing context is invoice.
+     */
     public void print(boolean isInvoice) {
         if (isInvoice) {
             print();
@@ -147,6 +161,13 @@ public class MenuBundle extends MenuComponent {
 
     }
 
+    /**
+     * Search child items given an item code. Returns the index in the menu if
+     * exists and -1 otherwise.
+     *
+     * @param mc The item code to search for.
+     * @return The index in the menu if exists and -1 otherwise.
+     */
     public int contains(int itemCode) {
         for (int i = 0; i < children.size(); i++) {
             if (children.get(i).code == itemCode)

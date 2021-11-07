@@ -27,6 +27,9 @@ public class MenuLeaf extends MenuComponent {
         this.price = price;
     }
 
+    /**
+     * Clone constructor.
+     */
     public MenuLeaf(MenuLeaf mf) {
         this(mf.code, mf.name, mf.description, mf.price);
     }

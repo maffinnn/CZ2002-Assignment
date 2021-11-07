@@ -2,11 +2,9 @@ package restaurant;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.io.*;
-import java.util.Scanner;
 
 /**
  * Restaurant class bundles different systems in the restaurant. The class
@@ -18,18 +16,39 @@ import java.util.Scanner;
  */
 public class Restaurant {
 
+    /**
+     * Restaurant menu.
+     */
     public Menu menu;
 
+    /**
+     * Restaurant menu code to item look up talbe.
+     */
     public HashMap<Integer, MenuComponent> menuReference;
 
+    /**
+     * Table and reservation manager.
+     */
     public TableManager tableManager;
 
+    /**
+     * Active orders.
+     */
     public ArrayList<Order> activeOrders;
 
+    /**
+     * Inactive (paied) orders.
+     */
     public ArrayList<Order> inactiveOrders;
 
+    /**
+     * Restaurant staff.
+     */
     public HashMap<Integer, Staff> staff;
 
+    /**
+     * Restaurant historical orders, used for sales report.
+     */
     public TreeSet<Order> historyOrders;
 
     public Restaurant() {
@@ -58,6 +77,12 @@ public class Restaurant {
         return activeOrders;
     }
 
+    /**
+     * Search active orders by table id.
+     *
+     * @param tableId Inquired table id.
+     * @return Active order using the table, or {@code null} if not found.
+     */
     public Order getOrderbytableId(int tableId) {
         int n = activeOrders.size();
         Order o = null;
@@ -79,8 +104,7 @@ public class Restaurant {
         SalesReport report = new SalesReport(from, to);
         if (historyOrders.size() == 0)
             loadhistoryOrders();
-
-        Iterator it = historyOrders.iterator();
+        var it = historyOrders.iterator();
         for (; it.hasNext();) {
             Order o = (Order) it.next();
             if (o.reservation.time.toLocalDate().isAfter(from) && o.reservation.time.toLocalDate().isBefore(to)) {
@@ -90,7 +114,9 @@ public class Restaurant {
         return report;
     }
 
-    // All save and load functions
+    /**
+     * Load menu items code information from file.
+     */
     public void loadMenuReference() {
         try {
             String fileName = "restaurant\\MenuReference.txt";
@@ -138,6 +164,9 @@ public class Restaurant {
         }
     }
 
+    /**
+     * Save menu items code information to file.
+     */
     public void saveMenuReference() {
         try {
             String fileName = "restaurant\\MenuReference.txt";
@@ -161,6 +190,9 @@ public class Restaurant {
         }
     }
 
+    /**
+     * Load menu information from file.
+     */
     private void loadMenu() {
         try {
             String fileName = "restaurant\\Menu.txt";
@@ -185,6 +217,9 @@ public class Restaurant {
         }
     }
 
+    /**
+     * Save menu information to file.
+     */
     private void saveMenu() {
         try {
             String fileName = "restaurant\\Menu.txt";
@@ -207,6 +242,9 @@ public class Restaurant {
         }
     }
 
+    /**
+     * Load order information from file.
+     */
     private void loadOrder() {
         try {
             String fileName = "restaurant\\activeOrders.txt";
@@ -245,6 +283,9 @@ public class Restaurant {
 
     }
 
+    /**
+     * Save active orders & inactive orders to file.
+     */
     private void saveOrder() {
         // save active orders
         try {
@@ -291,6 +332,9 @@ public class Restaurant {
 
     }
 
+    /**
+     * Load staff information from file.
+     */
     private void loadStaff() {
         try {
             String fileName = "restaurant\\staff.txt";
@@ -313,6 +357,9 @@ public class Restaurant {
         }
     }
 
+    /**
+     * Save staff information to file.
+     */
     private void saveStaff() {
         try {
             String filename = "restaurant\\staff.txt";
@@ -328,6 +375,9 @@ public class Restaurant {
         }
     }
 
+    /**
+     * Save all relevant states to file.
+     */
     public void saveAll() {
         saveMenuReference();
         saveMenu();
@@ -335,6 +385,9 @@ public class Restaurant {
         saveStaff();
     }
 
+    /**
+     * Load historical orders form file, for sales report.
+     */
     public void loadhistoryOrders() {
         String pathName = "restaurant\\historyOrders/";
 
@@ -366,15 +419,15 @@ public class Restaurant {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
-
     }
 
+    /**
+     * Update time of all orders.
+     */
     public void updateTime() {
         for (Order o : activeOrders) {
             o.updateTime();
         }
     }
-
 }

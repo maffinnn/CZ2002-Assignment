@@ -25,6 +25,7 @@ public abstract class MenuComponent {
     public String description;
 
     /**
+     * @param code        The code of the component.
      * @param name        The name of the component.
      * @param description The description of the component.
      */
@@ -46,6 +47,14 @@ public abstract class MenuComponent {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Returns the total price (quantity * price) of the component.
+     *
+     * @return The total price of the component in SGD (should always be rounded to
+     *         two decimal places).
+     * @throws UnsupportedOperationException If the component doesn't have a price
+     *                                       (e.g. {@link Menu} ).
+     */
     public double getTotalPrice() {
         throw new UnsupportedOperationException();
     }
@@ -138,5 +147,4 @@ public abstract class MenuComponent {
     public void print() {
         System.out.println(this.name + ": " + this.description);
     }
-
 }

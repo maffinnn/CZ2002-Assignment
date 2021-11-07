@@ -58,5 +58,4 @@ public class Reservation implements Comparable<Reservation> {
         } else
             return false;
     }
-
 }

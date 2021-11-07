@@ -19,7 +19,7 @@ public class Menu extends MenuComponent {
 
     /**
      * @param code        The code of the component. Code equals -1 means is a
-     *                    category
+     *                    category.
      * @param name        The name of the component.
      * @param description The description of the component.
      */
@@ -36,6 +36,9 @@ public class Menu extends MenuComponent {
      * @throws IllegalArgumentException If the index is out of range.
      */
     public MenuComponent getChild(int index) {
+        if (index < 0 || index >= children.size()) {
+            throw new IllegalArgumentException();
+        }
         return children.get(index);
     }
 
@@ -71,6 +74,14 @@ public class Menu extends MenuComponent {
         children.remove(index);
     }
 
+    /**
+     * Search child components given a component. Returns the identical component in
+     * the menu if exists and {@code null} otherwise.
+     *
+     * @param mc The component to search for.
+     * @return The identical component in the menu if exists and {@code null}
+     *         otherwise.
+     */
     public MenuComponent contains(MenuComponent mc) {
         for (int i = 0; i < children.size(); i++) {
             if (children.get(i).code == mc.code)
@@ -79,18 +90,18 @@ public class Menu extends MenuComponent {
         return null;
     }
 
+    /**
+     * Search child components given an item code. Returns the index in the menu if
+     * exists and -1 otherwise.
+     *
+     * @param itemCode The item code to search for.
+     * @return The index in the menu if exists and -1 otherwise.
+     */
     public int contains(int itemCode) {
         for (int i = 0; i < children.size(); i++) {
             if (children.get(i).code == itemCode)
                 return i;
         }
         return -1;
-    }
-
-    /**
-     * Prints the content of the menu to standard output in a user-friendly way.
-     */
-    public void print() {
-        // TODO
     }
 }

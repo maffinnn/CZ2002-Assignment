@@ -1,6 +1,5 @@
 package restaurant;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -11,9 +10,19 @@ import java.util.Random;
 
 public class RestaurantApp {
 
+    /**
+     * Scanner used across all subroutines.
+     */
     Scanner sc = new Scanner(System.in);
+
+    /**
+     * Date formatter used across all subroutines.
+     */
     DateTimeFormatter dt_formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
+    /**
+     * Restaurant backend.
+     */
     Restaurant myRestaurant;
 
     public static void main(String args[]) {
@@ -22,6 +31,12 @@ public class RestaurantApp {
         myApp.run();
     }
 
+    /**
+     * Menu item editing subroutine.
+     *
+     * @param category The item to be edited.
+     * @return Whether the edit is successful.
+     */
     private boolean editItem(MenuComponent category) {
         System.out.print("0.\tGo back\n" + "1.\tAdd item\n" + "2.\tUpdate item\n" + "3.\tRemove item\n"
                 + "4.\tRemove this category\n" + "Choose option:");
@@ -216,6 +231,9 @@ public class RestaurantApp {
         return true;
     }
 
+    /**
+     * Restaurant menu edit subroutine.
+     */
     private void editMenu() {
         boolean flag = false;
         while (!flag) {
@@ -241,11 +259,17 @@ public class RestaurantApp {
 
     }
 
+    /**
+     * Print sales report.
+     */
     private void printReport(LocalDate from, LocalDate to) {
         SalesReport report = myRestaurant.generateSalesReport(from, to);
         report.print();
     }
 
+    /**
+     * Print menu category.
+     */
     private void displayCategory() {
         Menu menu = myRestaurant.menu;
         // System.out.print("\t" + menu.name + "category");
@@ -255,6 +279,11 @@ public class RestaurantApp {
         }
     }
 
+    /**
+     * Print all itmes in a category.
+     *
+     * @param category The category to be printed.
+     */
     private void displayItems(MenuComponent category) {
         for (int j = 0; j < category.getChildrenCount(); j++) {
             MenuComponent item = category.getChild(j);
@@ -263,6 +292,11 @@ public class RestaurantApp {
         }
     }
 
+    /**
+     * Print combo item.
+     *
+     * @param combo The combo item to be printed.
+     */
     private void displayCombos(MenuComponent combo) {
         for (int j = 0; j < combo.getChildrenCount(); j++) {
             MenuComponent mb = combo.getChild(j);
@@ -274,6 +308,9 @@ public class RestaurantApp {
         }
     }
 
+    /**
+     * Print the menu of the restaurant.
+     */
     private void displayMenu() {
         Menu menu = myRestaurant.menu;
         System.out.println(menu.name);
@@ -300,6 +337,9 @@ public class RestaurantApp {
         myRestaurant.tableManager.printAllTables(time);
     }
 
+    /**
+     * Print active orders.
+     */
     private void displayOrders() {
         System.out.println("activeOrders");
         int numOfOrders = myRestaurant.activeOrders.size();
@@ -309,6 +349,11 @@ public class RestaurantApp {
         }
     }
 
+    /**
+     * Edit an order.
+     *
+     * @param o Order to be edited.
+     */
     private void editOrder(Order o) {
         int op;
         do {
@@ -367,6 +412,9 @@ public class RestaurantApp {
 
     }
 
+    /**
+     * Main menu of the app.
+     */
     private void run() {
         myRestaurant = new Restaurant();
         int op;
@@ -435,8 +483,10 @@ public class RestaurantApp {
         } while (op > 0 && op < 7);
     }
 
+    /**
+     * Helper function for adding a new order.
+     */
     private void makeOrder(int staffId, int tableId, int pax) {
-
         Staff s = myRestaurant.staff.get(staffId);
         ArrayList<Reservation> reservationList = myRestaurant.tableManager.getReservation(tableId);
         Reservation r;
@@ -454,12 +504,13 @@ public class RestaurantApp {
      */
     // staff will check all the available table before makeReservation() is called
     private void makeReservation(LocalDateTime time, int tableId, int pax, long contact) {
-
         Reservation r = new Reservation(time, tableId, pax, contact);
         myRestaurant.tableManager.addReservation(r);
-
     }
 
+    /**
+     * Reservation subroutine.
+     */
     private void runReservation() {
         int op;
         do {
@@ -530,6 +581,9 @@ public class RestaurantApp {
         } while (op > 0 && op < 4);
     }
 
+    /**
+     * Restaurant menu subroutine.
+     */
     private void runMenu() {
         int op;
         do {
@@ -550,6 +604,9 @@ public class RestaurantApp {
         } while (op > 0 && op < 3);
     }
 
+    /**
+     * Order subroutine.
+     */
     private void runOrder() {
         int op;
         do {
@@ -615,8 +672,6 @@ public class RestaurantApp {
             default:
                 break;
             }
-
         } while (op > 0 && op < 5);
-
     }
 }

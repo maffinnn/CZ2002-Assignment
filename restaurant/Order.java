@@ -1,7 +1,6 @@
 package restaurant;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 /**
  * Order objects include a {@link Menu} object that is used for ordering items
@@ -16,11 +15,6 @@ public class Order implements Comparable<Order> {
      * A menu contains the ordered items and quantity.
      */
     public Menu orderedItems;
-
-    // Making order menu private doesn't make sense since Menu class already handles
-    // all the functions needed.
-    // Unlike the order menu above, discountRate could be private, but I'm too
-    // lazy to write getter and setters now.
 
     /**
      * The membership discount that is applied to the order.
@@ -47,6 +41,9 @@ public class Order implements Comparable<Order> {
      */
     private boolean active;
 
+    /**
+     * The staff created the order.
+     */
     private Staff staff;
 
     /**
@@ -64,7 +61,6 @@ public class Order implements Comparable<Order> {
      * @param reservation The reservation from which the order will be created. Can
      *                    not be {@code null}.
      * @param staff       The staff who created the order.
-     * @throws IllegalArgumentException If reservation or staff is {@code null}.
      */
     public Order(Reservation reservation, Staff staff) {
         this.reservation = reservation;
@@ -81,8 +77,13 @@ public class Order implements Comparable<Order> {
         active = false;
     }
 
+    /**
+     * Add item to order.
+     *
+     * @param item     The item to add.
+     * @param quantity The quantity of the added item.
+     */
     public void addItem(MenuComponent item, int quantity) {
-
         MenuComponent itemInOrder = orderedItems.contains(item);
         if (itemInOrder != null) {
             itemInOrder.setQuantity(itemInOrder.getQuantity() + quantity);
@@ -98,13 +99,24 @@ public class Order implements Comparable<Order> {
             ml.setQuantity(quantity);
             orderedItems.addChild(ml);
         }
-
     }
 
+    /**
+     * Returns the table used by the order.
+     *
+     * @return The table id used by the order.
+     */
     public int getTableId() {
         return reservation.tableId;
     }
 
+    /**
+     * Search ordered items given an item code. Returns the index in the order if
+     * exists and -1 otherwise.
+     *
+     * @param itemCode The item code to search for.
+     * @return The index in the order if exists and -1 otherwise.
+     */
     public int getItemIndex(int itemCode) {
         int ret = -1;
         int n = orderedItems.getChildrenCount();
@@ -122,7 +134,6 @@ public class Order implements Comparable<Order> {
      * way.
      */
     public void print() {
-
         System.out.println("\n==========================================");
         System.out.println("Restaurant 0.0");
         System.out.printf("Server:%s\t\tTable:%d\n", staff.getId(), reservation.tableId);
@@ -182,17 +193,29 @@ public class Order implements Comparable<Order> {
         System.out.printf("%24s\t%.2f\n", "TOTAL:", totalPrice + serviceCharge + tax);
         System.out.println("==========================================\n");
         reservation.time = LocalDateTime.now();
-
     }
 
+    /**
+     * Change the starting time of the reservation to now.
+     */
     public void updateTime() {
         reservation.time = LocalDateTime.now();
     }
 
+    /**
+     * Returns the total price of the order (which is calculated in print()).
+     *
+     * @return The total price of the order.
+     */
     public double getTotalPrice() {
         return totalPrice;
     }
 
+    /**
+     * Returns the id of the staff who created the order.
+     *
+     * @return The id of the staff who created the order.
+     */
     public int getStaffId() {
         return staff.getId();
     }

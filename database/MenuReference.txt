@@ -1,0 +1,15 @@
+1895:0:Roasted Tomato Soup:5.0:Oven-roasted Tomatoes, Garlic and Croutons
+5096:1:ComboB:23.0:333,4361
+4361:0:Slipper Lobster Pasta:20.0:Spaghetti, Splipper Loabster, Kombu and English Chives in Spiced Lobster oil
+1324:0:Truffle Mushroom Soup:6.0:Button Mushroom, Truffle Oil, Fresh Cream and Croutons
+7853:0:Classic Casesar Salad:8.0:Baby Romaine Lettuce, Egg, Croutons, Bacon and Parmesan Cheese
+333:0:Kiss On the Lips:6.0:Grenadine, Soda, Orange Juice
+241:0:Smoked Duck Salad:9.0:Smoked Duck Breast, Japanese Cucumber, Cherry Tomato  
+849:1:ComboA:22.0:1324,951
+3442:0:Charcoal-grilled Surme Ika (whole):15.0:Chargrilled Japanese Flying Squid in Teriyaki Sauce   
+82:0:Carbonara:15.0:Spaghetti, Bacon, Mushroom and Ham in Cream Sauce
+402:0:English Carrot Cake:9.0:with Vanilla Ice Cream
+627:0:Milky Popcorn:6.0:Japanese Sencha with Roasted Rice, popcorn with Butterscotch Aroma
+951:0:Signature Roasted BBQ Pork Ribs:19.0:Coleslaw, Cajun Fries, Corn Cob, Mesclun Salad with BBQ Sauce
+123:0:Argentine Black Angus Ribeye Prime Steak (200g):24.0:Seasonal Vegetables, Potato Au Gratin, Pesto Cream and Black Pepper Sauces
+190:0:Tiramisu:8.0:Classic Italian Dessert made with Expresso-soaked Ladyfiners and Mascarpone Cream

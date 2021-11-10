@@ -1,0 +1,7 @@
+3
+Gary Greave
+233,Manager,Male
+Bryan Tan
+41,Chef,Male
+Celeste Leo
+123,Server,Female

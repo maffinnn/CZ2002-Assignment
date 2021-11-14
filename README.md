@@ -6,8 +6,6 @@ Credits: Bian Siyuan, Chan Chor Cheng, Shrivastava Samruddhi, Wang Yujing, Zhou 
 
 * index.html is the main directory for java documentation under ./Code and javadoc/javadoc/
 
-* If there is any problem with accessing the code, you may find the source code on github: https://github.com/maffinnn/CZ2002-Assignment
-
 * If the code does not run on your PC, probably it is due to the different convention of directory address in your PC e.g. in windows system "restaurant\database\somefile.txt"
 
   ​	   in MacOs "./restaurant/database/somefile.txt"
